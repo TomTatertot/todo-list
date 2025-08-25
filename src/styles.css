@@ -64,7 +64,7 @@ nav button:hover{
   /* text-align: left; */
   /* padding: 0 4rem; */
   font-size:1.25rem;
-  margin: 0 10rem;
+  margin-right: 10rem;
 
 }
 
@@ -75,37 +75,62 @@ nav button:hover{
 }
 
 .task{
-  display: flex;
-  /* align-items: center; */
+  /* display: flex; */
+  /* flex-direction: column; */
   gap: 1rem;
-  padding: 0.5rem 2rem;
+  padding: 0.8rem 0;
+  margin: 0 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.384);
 }
 
 .task:hover{
-  background-color: rgba(0, 0, 0, 0.205);
+  /* background-color: rgba(0, 0, 0, 0.205); */
+}
+
+.task-main-info{
+  display: flex;
+  /* align-items: center; */
 }
 
 .task-data {
   display: flex;
   flex-grow: 1;
-  /* flex-direction: row;/ */
   justify-content: space-between;
-  /* padding: 1rem 2rem; */
-  /* margin-right: 15rem; */
-  /* background-color: rgba(10, 10, 10, 0.105); */
-  border-radius: 10px;
   font-size: 1.25rem;
 }
 
-.task-unchecked{
-  width: 15px;
-  height: 15px;
-  border: 1px solid black;
-  border-radius: 50%;
+.task-description{
+  display: block;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.712);
+}
+
+
+
+.add-task {
+  display: flex;
+  margin: 0 2rem;
+  gap: 2rem;
+}
+
+.add-task:hover, .add-task-button:hover {
+  color: blue;
+}
+
+.add-task p {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.add-task-button{
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-grow: 1;
 }
 
 .container {
-  display: block;
+  display: inline;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
@@ -129,18 +154,20 @@ nav button:hover{
 /* Create a custom checkbox */
 .checkmark {
   position: absolute;
-  top: 0;
+  top: 5px;
   left: 0;
-  height: 25px;
-  width: 25px;
-  border: 1px solid black;
+  height: 20px;
+  width: 20px;
+  border: 3px solid rgba(0, 26, 255, 0.6);
+  border-radius: 50%;
   background-color: #eee; 
 }
 
 
 /* When the checkbox is checked, add a blue background */
+.container:hover .checkmark,
 .container input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color:rgba(0, 26, 255, 0.7);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -151,41 +178,22 @@ nav button:hover{
 }
 
 /* Show the checkmark when checked */
+.container:hover .checkmark:after,
 .container input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  left: 9px;
-  top: 3px;
+  left: 4px;
+  top: 0px;
   width: 6px;
-  height: 15px;
+  height: 13px;
   border: solid white;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
-}
-
-.add-task-button{
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 2rem;
-  width: 100%;
-  &:hover{
-    background-color: rgba(0, 0, 0, 0.205);
-  }
-
-  span {
-    font-size: 2rem;
-  }
-}
-
-.add-task-button:hover {
-  /* background-color: rgba(0, 0, 0, 0.205); */
-
 }
 
 
