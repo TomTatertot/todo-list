@@ -11,15 +11,16 @@ header{
     
   height:10vh;
 
-  background-color: rgba(0, 0, 0, 0.52);
+  background-color: rgba(18, 57, 161, 0.52);
   color: white;
   font-size: 1.5rem;
 }
 
-.content{
+
+#content{
   display: flex;
   flex-direction: row;
-  gap: 10rem;
+  /* gap: 10rem; */
 
   padding-top: 3rem;
 }
@@ -28,17 +29,22 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: left;
+  padding-left: 0.5rem;
+
   
   height: 90vh;
-  width: 15vw;
-
+  width: 20vw;
   
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-nav h1 {
-  padding-left: 1rem;
-  margin: 1rem 0;
+.project-header {
+  margin: 0.5rem 0.5rem;
+}
+
+nav img{
+  width: 20px;
+  height: 20px;
 }
 
 .home, .projects{
@@ -48,9 +54,12 @@ nav h1 {
 }
 
 nav button{
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   border: none;
   text-align: start;
-  padding: 0.25rem 2rem;
+  padding: 0.25rem 1.25rem;
   background-color: inherit;
 }
 
@@ -59,13 +68,17 @@ nav button:hover{
   cursor: pointer;
 }
 
+.add-project-button p{
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
 .right{
-  width: 85vw;
+  width: 80vw;
   /* text-align: left; */
   /* padding: 0 4rem; */
   font-size:1.25rem;
-  margin-right: 10rem;
-
+  margin: 0 15rem;
 }
 
 .right h1{
@@ -103,9 +116,9 @@ nav button:hover{
   display: block;
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.712);
+  padding-right: 8ch;
+  padding-left: 2.2rem;
 }
-
-
 
 .add-task {
   display: flex;
@@ -133,7 +146,7 @@ nav button:hover{
   display: inline;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   cursor: pointer;
   font-size: 22px;
   -webkit-user-select: none;

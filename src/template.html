@@ -8,29 +8,40 @@
 </head>
 
 <body>
-    <header>
-        <h1>To-do List</h1>
+    <!-- <header>
+        <h1>Todo List</h1>
     </header>
-    <div class="content">
-        <nav class="left">
-            
+    <div id="content">
+        <nav class="nav">
             <div class="home">
-                <button>Inbox</button>
-                <button>Today</button>
-                <button>Upcoming</button>
+                <button><img src="./images/inbox.svg">Inbox</button>
+                <button><img src="./images/calendar-today.svg">Today</button>
+                <button><img src="./images/calendar-month.svg">Upcoming</button>
+                <button><img src="./images/check-circle-outline.svg">Completed</button>
             </div>
-            <h1>Projects</h1>
             <div class="projects">
-                <button>+ Add Project</button>
-                <button>Coding Projects</button>
+                <h3 class="project-header">My Projects</h3>
+                <button class="add-project-button"><img src="./images/plus-circle-outline.svg">Add Project</button>
             </div>
         </nav>
         <div class="right">
             <h1>Today</h1>
-            <div class="add-task">
-                <p>+</p>
-                <button class="add-task-button">Add Task</button>
+            <div class="task">
+                <div class="task-main-info">
+                    <label class="container">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="task-data">
+                        <p class="task-title">Title</p>
+                        <p class="task-date">8/29/25</p>
+                    </div>
+                </div>
+                <p class="task-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nostrum
+                    ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Voluptatibus, quidem.</p>
             </div>
+
             <div class="task">
                 <div class="task-main-info">
                     <label class="container">
@@ -47,28 +58,26 @@
             </div>
 
             <div class="task">
-                <label class="container">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <div class="task-data">
-                    <p class="task-title">Title 2</p>
-                    <p class="task-date">8/29/25</p>
+                <div class="task-main-info">
+                    <label class="container">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <div class="task-data">
+                        <p class="task-title">Title</p>
+                        <p class="task-date">8/29/25</p>
+                    </div>
                 </div>
+                <p class="task-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nostrum
+                    ipsum qui hic quia eveniet ut quasi natus dolores consequuntur.</p>
             </div>
 
-            <div class="task">
-                <label class="container">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <div class="task-data">
-                    <p class="task-title">Title 3</p>
-                    <p class="task-date">8/29/25</p>
-                </div>
+            <div class="add-task">
+                <p>+</p>
+                <button class="add-task-button">Add Task</button>
             </div>
         </div>
-    </div>
+    </div> -->
 </body>
 
 </html>

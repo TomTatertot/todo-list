@@ -1,5 +1,8 @@
 //inbox, today, upcoming
 
-export function loadInbox(){
-    
+export function loadNav(){
+
+}
+function loadInbox(){
+
 }
