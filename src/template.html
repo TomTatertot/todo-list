@@ -5,104 +5,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 </head>
 
-<body>
-    <header>
+<!-- <body>
+    <header class="header">
         <h1>Todo List</h1>
     </header>
     <div id="content">
-        <nav class="nav">
-            <ul class="nav__list">
-                <li class="nav__item">
-                    <button class="nav__button" type="button">
-                        <img src="./images/inbox.svg" class="nav__icon">
-                        <span class="nav__label">Inbox</span>
-                    </button>
+        <aside class="sidebar">
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <button class="nav__button" type="button">
+                            <img src="./images/inbox.svg" class="nav__icon">
+                            <span class="nav__label">Inbox</span>
+                        </button>
+                    </li>
+                    <li class="nav__item">
+                        <button class="nav__button" type="button">
+                            <img src="./images/calendar-today.svg" class="nav__icon">
+                            <span class="nav__label">Today</span>
+                        </button>
+                    </li>
+                    <li class="nav__item">
+                        <button class="nav__button" type="button">
+                            <img src="./images/calendar-month.svg" class="nav__icon">
+                            <span class="nav__label">Upcoming</span>
+                        </button>
+                    </li>
+                    <li class="nav__item">
+                        <button class="nav__button" type="button">
+                            <img src="./images/check-circle-outline.svg" class="nav__icon">
+                            <span class="nav__label">Completed</span>
+                        </button>
+                    </li>
+                </ul>
+                <h2 class="nav__header">My Projects</h2>
+                <ul class="nav__list">
+                    <li>
+                        <button class="nav__button" type="button">
+                            <img src="./images/plus-circle-outline.svg" class="nav__icon">
+                            <span class="nav__label">Add Project</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main">
+            <h2 class="main__header">Today</h2>
+
+            <ul class="main__task-list">
+                <li class="task">
+                    <div class="task__top">
+                        <label class="task__checkbox">
+                            <input type="checkbox">
+                            <span class="task__checkmark"></span>
+                        </label>
+                        <div class="task__data">
+                            <p class="task__title">Title</p>
+                            <p class="task__date">8/29/25</p>
+                        </div>
+                    </div>
+                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                        nostrum
+                        ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
-                <li class="nav__item">
-                    <button class="nav__button" type="button">
-                        <img src="./images/calendar-today.svg" class="nav__icon">
-                        <span class="nav__label">Today</span>
-                    </button>
+                <li class="task__item">
+                    <div class="task__top">
+                        <label class="task__checkbox">
+                            <input type="checkbox">
+                            <span class="task__checkmark"></span>
+                        </label>
+                        <div class="task__data">
+                            <p class="task__title">Title</p>
+                            <p class="task__date">8/29/25</p>
+                        </div>
+                    </div>
+                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                        nostrum
+                        ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
-                <li class="nav__item">
-                    <button class="nav__button" type="button">
-                        <img src="./images/calendar-month.svg" class="nav__icon">
-                        <span class="nav__label">Upcoming</span>
-                    </button>
-                </li>
-                <li class="nav__item">
-                    <button class="nav__button" type="button">
-                        <img src="./images/check-circle-outline.svg" class="nav__icon">
-                        <span class="nav__label">Inbox</span>
-                    </button>
+                <li class="task__item"> 
+                    <div class="task__top">
+                        <label class="task__checkbox">
+                            <input type="checkbox">
+                            <span class="task__checkmark"></span>
+                        </label>
+                        <div class="task__data">
+                            <p class="task__title">Title</p>
+                            <p class="task__date">8/29/25</p>
+                        </div>
+                    </div>
+                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                        nostrum
+                        ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
             </ul>
-            <h3 class="nav__header">My Projects</h3>
-            <ul class="nav__list">
-                <li>
-                    <button class="nav__button" type="button">
-                        <img src="./images/plus-circle-outline.svg" class="nav__icon">
-                        <span class="nav__label">Add Project</span>
-                    </button>
-                </li>
-            </ul>
-        </nav>
-        <div class="right">
-            <h1>Today</h1>
-            <div class="task">
-                <div class="task-main-info">
-                    <label class="container">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                    </label>
-                    <div class="task-data">
-                        <p class="task-title">Title</p>
-                        <p class="task-date">8/29/25</p>
-                    </div>
-                </div>
-                <p class="task-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nostrum
-                    ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Voluptatibus, quidem.</p>
-            </div>
-
-            <div class="task">
-                <div class="task-main-info">
-                    <label class="container">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                    </label>
-                    <div class="task-data">
-                        <p class="task-title">Title</p>
-                        <p class="task-date">8/29/25</p>
-                    </div>
-                </div>
-                <p class="task-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nostrum
-                    ipsum qui hic quia eveniet ut quasi natus dolores consequuntur.</p>
-            </div>
-
-            <div class="task">
-                <div class="task-main-info">
-                    <label class="container">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                    </label>
-                    <div class="task-data">
-                        <p class="task-title">Title</p>
-                        <p class="task-date">8/29/25</p>
-                    </div>
-                </div>
-                <p class="task-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nostrum
-                    ipsum qui hic quia eveniet ut quasi natus dolores consequuntur.</p>
-            </div>
-
-            <div class="add-task">
-                <p>+</p>
-                <button class="add-task-button">Add Task</button>
-            </div>
-        </div>
+            <button class="main__add-task-button"> <img src="./images/plus-circle-outline.svg" class="main__icon">Add
+                Task</button>
+        </main>
     </div>
-</body>
+</body> -->
 
 </html>

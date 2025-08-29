@@ -1,17 +1,24 @@
 /* styles.css */
+:root{
+  --primary-color: rgba(18, 57, 161, 0.52);
+  --secondary-color: rgb(252, 56, 7);
+  --background-color: white;
+  --font-color: black;
 
-body{
-  font-family: sans-serif;
 }
 
-header{
+body{
+  font-family: Montserrat;
+}
+
+.header{
   display: flex;
   justify-content: center;
   align-items: center;
     
   height:10vh;
 
-  background-color: rgba(18, 57, 161, 0.52);
+  background-color: var(--primary-color);
   color: white;
   font-size: 1.5rem;
 }
@@ -22,7 +29,7 @@ header{
   padding-top: 3rem;
 }
 
-.nav {
+.sidebar {
   height: 90vh;
   width: 20vw;
   font-size: 1.1rem;
@@ -60,16 +67,21 @@ header{
   cursor: pointer;
 }
 
-.right{
+.main{
   width: 80vw;
   font-size:1.25rem;
   margin: 0 15rem;
 }
 
-.right h1{
+.main__header{
   font-size: 2rem;
   margin-bottom: 2rem;
   padding: 0 2rem;
+}
+
+.main__icon {
+  width: 25px;
+  height: 25px;
 }
 
 .task{
@@ -77,51 +89,53 @@ header{
   padding: 0.8rem 0;
   margin: 0 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.384);
+  list-style-type: none;
 }
 
 
-.task-main-info{
+.task__top{
   display: flex;
 }
 
-.task-data {
+.task__data {
   display: flex;
   flex-grow: 1;
   justify-content: space-between;
   font-size: 1.25rem;
 }
 
-.task-description{
+.task__bottom{
   display: block;
   font-size: 1rem;
-  color: rgba(0, 0, 0, 0.712);
+  color: var(--font-color);
+  opacity: 0.6;
   padding-right: 8ch;
   padding-left: 2.2rem;
 }
 
-.add-task {
+
+.main__add-task-button {
   display: flex;
-  margin: 0 2rem;
-  gap: 2rem;
+  justify-content: left;
+  align-items: center;
+  margin: 1rem 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  gap: 1rem;
+  width: 100%;
 }
 
-.add-task:hover, .add-task-button:hover {
-  color: blue;
+.main__add-task-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.add-task p {
+.main__add-task  {
   font-size: 2rem;
   font-weight: bold;
 }
 
-.add-task-button{
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-grow: 1;
-}
 
-.container {
+.task__checkbox {
   display: inline;
   position: relative;
   padding-left: 35px;
@@ -134,7 +148,7 @@ header{
 }
 
 /* Hide the browser's default checkbox */
-.container input {
+.task__checkbox input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -142,8 +156,14 @@ header{
   width: 0;
 }
 
+.task__checkbox input:focus-visible + .task__checkmark {
+  outline: 2px solid black;
+  outline-offset: 1cappx;
+
+}
+
 /* Create a custom checkbox */
-.checkmark {
+.task__checkmark {
   position: absolute;
   top: 5px;
   left: 0;
@@ -156,26 +176,26 @@ header{
 
 
 /* When the checkbox is checked, add a blue background */
-.container:hover .checkmark,
-.container input:checked ~ .checkmark {
+.task__checkbox:hover .task__checkmark,
+.task__checkbox input:checked ~ .task__checkmark {
   background-color:rgba(0, 26, 255, 0.7);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+.task__checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
 /* Show the checkmark when checked */
-.container:hover .checkmark:after,
-.container input:checked ~ .checkmark:after {
+.task__checkbox:hover .task__checkmark:after,
+.task__checkbox input:checked ~ .task__checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.container .checkmark:after {
+.task__checkbox .task__checkmark:after {
   left: 4px;
   top: 0px;
   width: 6px;

@@ -3,6 +3,11 @@
 export function loadNav(){
 
 }
+
 function loadInbox(){
 
+}
+
+function loadProjects(){
+    
 }
