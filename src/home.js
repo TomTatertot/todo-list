@@ -3,7 +3,7 @@
 import inboxIcon from "./images/inbox.svg";
 import todayIcon from "./images/calendar-today.svg";
 import upcomingIcon from "./images/calendar-month.svg";
-import compeletedIcon from "./images/check-circle-outline.svg";
+import completedIcon from "./images/check-circle-outline.svg";
 import plusCircleIcon from "./images/plus-circle-outline.svg";
 
 function createHome(){
@@ -36,7 +36,7 @@ function createNav() {
     const inboxBtn = createNavButton(inboxIcon, "Inbox");
     const todayBtn = createNavButton(todayIcon, "Today");
     const upcomingBtn = createNavButton(upcomingIcon, "Upcoming");
-    const completedBtn = createNavButton(compeletedIcon, "Compeleted");
+    const completedBtn = createNavButton(completedIcon, "Completed");
 
     const addProjectBtn = createNavButton(plusCircleIcon, "Add Project");
 
@@ -61,6 +61,8 @@ function createNavButton(iconSrc, text){
     const img = document.createElement("img");
 
     img.src = iconSrc;
+    img.alt = "";
+    
     button.append(img, text);
 
     return button;
