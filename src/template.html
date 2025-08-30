@@ -11,7 +11,7 @@
         rel="stylesheet">
 </head>
 
-<!-- <body>
+<body>
     <header class="header">
         <h1>Todo List</h1>
     </header>
@@ -52,10 +52,11 @@
                             <span class="nav__label">Add Project</span>
                         </button>
                     </li>
+                    
                 </ul>
             </nav>
         </aside>
-        <main class="main">
+        <main id="main" class="main">
             <h2 class="main__header">Today</h2>
 
             <ul class="main__task-list">
@@ -75,7 +76,7 @@
                         ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
                         consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
-                <li class="task__item">
+                <li class="task">
                     <div class="task__top">
                         <label class="task__checkbox">
                             <input type="checkbox">
@@ -91,7 +92,7 @@
                         ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
                         consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
-                <li class="task__item"> 
+                <li class="task">
                     <div class="task__top">
                         <label class="task__checkbox">
                             <input type="checkbox">
@@ -110,8 +111,28 @@
             </ul>
             <button class="main__add-task-button"> <img src="./images/plus-circle-outline.svg" class="main__icon">Add
                 Task</button>
+            <form class="task-form">
+                <input class="task-form__input task-form__input--title" type="text" placeholder="Title" required>
+                <input class="task-form__input task-form__input--description" type="text" placeholder="Description">
+
+                <label class="task-form__label">Date:
+                    <input class="task-form__input task-form__input--date" type="date" required>
+                </label>
+                <label class="task-form__label">Priority:
+                        <button class="task-form__btn task-form__btn--low" type="button">Low</button>
+                        <button class="task-form__btn task-form__btn--medium" type="button">Medium</button>
+                        <button class="task-form__btn task-form__btn--high" type="button">High</button>
+                        <button class="task-form__btn task-form__btn--none" type="button">None</button>
+                    </select>
+                </label>
+                <div class="task-form__btns">
+                    <button class="task-form__btn task-form__btn--cancel" type="button">Cancel</button>
+                    <button class="task-form__btn task-form__btn--submit" type="button">Submit</button>
+                </div>
+                    
+            </form>
         </main>
     </div>
-</body> -->
+</body>
 
 </html>

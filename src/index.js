@@ -3,15 +3,24 @@ import "./styles.css";
 import "./reset.css"
 import Project from "./project.js";
 import {addItem, removeItemByID} from "./taskUtils.js";
-import createHome from "./home.js";
+import createHeader from "./header.js"
+import createSidebar from "./sidebar.js";
 
-initializeWebpage();
+// initializeWebpage();
 
 // const content = document.querySelector("#content");
 
 function initializeWebpage(){
-    createHome();
+    const body = document.querySelector("body");
+    const content = document.createElement("div");
+
+    const header = createHeader();
+    const sidebar = createSidebar();
+
+    content.id = "content";
+    body.append(header, content, sidebar);
 }
+
 // const todoItem = new Item("title", "random description here", "8/19/25", "high")
 // const todayProjects = new Project("Coding Projects");
 
