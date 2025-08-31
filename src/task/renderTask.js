@@ -1,4 +1,7 @@
-function createTaskHTML(task) {
+function createTask(task) {
+    console.log("renderTask");
+    console.log(task);
+    console.log(task.priority);
     const taskHTML = document.createElement("li");
     const checkbox = createCheckbox(task.priority);
     const top = document.createElement("div");
@@ -18,12 +21,13 @@ function createTaskHTML(task) {
 
     title.textContent = task.title; 
     date.textContent = task.date;
-    description = task.description;
+    description.textContent = task.description;
 
     taskHTML.append(top, bottom);
     top.append(checkbox, title, date);
     bottom.append(description);
 
+    console.log(taskHTML);
     return taskHTML;
 }
 
@@ -32,10 +36,8 @@ function createCheckbox(priority) {
     const input = document.createElement("input");
     const span = document.createElement("span");
 
-    if (priority === "")
-        priority = "no";
-
-    label.classlist.add("task__checkbox", `task--${priority}-priority`);
+    console.log(priority);
+    label.classList.add("task__checkbox", `task__checkbox--priority-${priority}`);
     span.classList.add("task__checkmark");
 
     input.type = "checkbox";
@@ -44,3 +46,5 @@ function createCheckbox(priority) {
 
     return label;
 }
+
+export default createTask;

@@ -34,7 +34,7 @@ function createSidebar() {
     homeList.append(inbox, today, upcoming, completed);
     projectList.append(addProjectBtn);
 
-    return nav;
+    return sidebar;
 }
 
 function createNavItem(iconSrc, text){
@@ -48,6 +48,7 @@ function createNavItem(iconSrc, text){
     img.classList.add("nav__icon");
     span.classList.add("nav__label");
 
+    button.dataset.view = text.toLowerCase(); //add dataset.view to delagate which nav button is clicked later
     img.src = iconSrc;
     img.alt = "";
 

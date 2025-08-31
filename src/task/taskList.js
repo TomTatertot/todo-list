@@ -1,6 +1,6 @@
 import Task from "./Task.js"
 
-export function addTask(taskList, ...taskData) {
+export function addTaskToList(taskList, ...taskData) {
     taskList.push(new Task(...taskData));
 }
 
