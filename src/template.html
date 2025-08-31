@@ -57,7 +57,7 @@
             </nav>
         </aside>
         <main id="main" class="main">
-            <h2 class="main__header">Today</h2>
+            <h2 class="main__header">Inbox</h2>
 
             <ul class="main__task-list">
                 <li class="task">
@@ -71,10 +71,26 @@
                             <p class="task__date">8/29/25</p>
                         </div>
                     </div>
-                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                    <p class="task__description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
                         nostrum
                         ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
                         consectetur adipisicing elit. Voluptatibus, quidem.</p>
+                </li>
+                <li class="task">
+                    <div class="task__top">
+                        <label class="task__checkbox">
+                            <input type="checkbox">
+                            <span class="task__checkmark"></span>
+                        </label>
+                        <p class="task__title">Title</p>
+                        <p class="task__date">8/29/25</p>
+                    </div>
+                    <div class="task__bottom">
+                        <p class="task__description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                        nostrum
+                        ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Voluptatibus, quidem.</p>
+                    </div>
                 </li>
                 <li class="task">
                     <div class="task__top">
@@ -87,29 +103,43 @@
                             <p class="task__date">8/29/25</p>
                         </div>
                     </div>
-                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
-                        nostrum
-                        ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Voluptatibus, quidem.</p>
-                </li>
-                <li class="task">
-                    <div class="task__top">
-                        <label class="task__checkbox">
-                            <input type="checkbox">
-                            <span class="task__checkmark"></span>
-                        </label>
-                        <div class="task__data">
-                            <p class="task__title">Title</p>
-                            <p class="task__date">8/29/25</p>
-                        </div>
-                    </div>
-                    <p class="task__bottom">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
+                    <p class="task__description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
                         nostrum
                         ipsum qui hic quia eveniet ut quasi natus dolores consequuntur. Lorem ipsum dolor sit amet
                         consectetur adipisicing elit. Voluptatibus, quidem.</p>
                 </li>
             </ul>
-            <button class="main__add-task-button"> <img src="./images/plus-circle-outline.svg" class="main__icon">Add
+            <div class="main__wrapper">
+                <button class="main__add-task"> <img src="./images/plus-circle-outline.svg"
+                        class="main__add-task-icon">Add
+                    Task</button>
+                <form class="task-form">
+                    <label class="task-form__label" for="title">Title:</label>
+                    <input class="task-form__input task-form__input--title" id="title" type="text" name="title"
+                        placeholder="Gym" required>
+
+                    <label class="task-form__label" for="description">Description:</label>
+                    <textarea class="task-form__input task-form__input--description" id="description" name="description"
+                        placeholder="Hit leg day"></textarea>
+
+                    <label class="task-form__label" for="date">Date:</label>
+                    <input class="task-form__input task-form__input--date" id="date" type="date" name="date" required>
+
+                    <label class="task-form__label" for="priority">Priority:</label>
+                    <select class="task-form__select" id="priority" name="priority">
+                        <option value="">None</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+
+                    <div class="task-form__actions">
+                        <button class="task-form__btn task-form__btn--cancel" type="button">Cancel</button>
+                        <button class="task-form__btn task-form__btn--submit" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <!-- <button class="main__add-task-button"> <img src="./images/plus-circle-outline.svg" class="main__icon">Add
                 Task</button>
             <form class="task-form">
                 <label class="task-form__label" for="title">Title:</label>
@@ -135,7 +165,7 @@
                     <button class="task-form__btn task-form__btn--cancel" type="button">Cancel</button>
                     <button class="task-form__btn task-form__btn--submit" type="submit">Submit</button>
                 </div>
-            </form>
+            </form> -->
         </main>
     </div>
 </body>

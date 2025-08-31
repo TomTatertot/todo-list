@@ -2,7 +2,7 @@
 import "./styles.css";
 import "./reset.css"
 import Project from "./project.js";
-import {addItem, removeItemByID} from "./taskUtils.js";
+import {addItem, removeItemByID} from "./task/taskList.js";
 import createHeader from "./header.js"
 import createSidebar from "./sidebar.js";
 
@@ -15,7 +15,15 @@ function initializeWebpage(){
     const content = document.createElement("div");
 
     const header = createHeader();
-    const sidebar = createSidebar();
+    const sidebar = createSidebar(); 
+    const main = document.createElement("main");
+    const mainHeader = document.createElement("h2");
+
+    main.id = "main";
+    main.classList.add("main");
+    mainHeader.classList.add("main__header");
+
+    mainHeader.textContent = "Inbox";
 
     content.id = "content";
     body.append(header, content, sidebar);
