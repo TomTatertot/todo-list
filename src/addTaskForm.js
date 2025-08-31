@@ -1,11 +1,13 @@
+import plusCircleIcon from "./images/plus-circle-outline.svg";
+
 function createAddTask() {
     const wrapper = document.createElement("div");
     wrapper.classList.add("main__wrapper");
 
-    wrapper.innerHTML = `<button class="main__add-task"> <img src="./images/plus-circle-outline.svg"
+    wrapper.innerHTML = `<button class="main__add-task"> <img src=${plusCircleIcon}
                         class="main__add-task-icon">Add
                     Task</button>
-                <form class="task-form">
+                <form class="task-form hidden">
                     <label class="task-form__label" for="title">Title:</label>
                     <input class="task-form__input task-form__input--title" id="title" type="text" name="title"
                         placeholder="Gym" required>
@@ -39,7 +41,9 @@ function attachTaskEvents(container) {
     const form = container.querySelector(".task-form");
     const addTaskBtn = container.querySelector(".main__add-task")
 
-    addTaskBtn.addEventListener( () => {
+    addTaskBtn.addEventListener("click", () => {
         form.classList.remove("hidden");
     });
 }
+
+export default createAddTask;
