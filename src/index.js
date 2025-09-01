@@ -7,78 +7,86 @@ import { addTaskToList, removeTaskByID, getTaskById } from "./task/taskList.js";
 import createHeader from "./header.js"
 import createSidebar from "./sidebar.js";
 import createInbox from "./inbox.js";
+import createAddTask from "./addTaskForm.js";
 
-const allItems = [];
-addTaskToList(allItems,{
+const state = {
+    tasks: [],
+    view: "inbox",
+}
+
+addTaskToList(state.tasks,{
     title: "Gym",
     description: "Hit leg day today!",
-    date: "8/29/25",
-    priority: "medium"
+    date: "2025-08-15",
+    priority: "high"
 });
-addTaskToList(allItems,{
-    title: "Gym",
-    description: "Hit leg day today!",
-    date: "8/29/25",
-    priority: "medium"
+
+addTaskToList(state.tasks,{
+    title: "Code",
+    description: "Code for at least two hours without getting distracted!",
+    date: "2025-08-15",
+    priority: "low"
 });
 
 initializeWebpage();
 
 const sidebar = document.querySelector(".sidebar");
-sidebar.addEventListener("click", sidebarClick)
-
-// const content = document.querySelector("#content");
-// const itemOne = new Task("Gym", "Hit leg day today!", "8/26/25", "medium");
-// const itemTwo = new Task("Coding Practice", "random description here", "8/19/25", "high");
-// const itemThree = new Task("Grocery Shopping", "random description here", "8/19/25", "medium");
+sidebar.addEventListener("click", sidebarClick);
 
 
-
-console.log(allItems);
 
 function initializeWebpage() {
-    const body = document.querySelector("body");
     const content = document.createElement("div");
 
     const header = createHeader();
     const sidebar = createSidebar();
-    const main = document.createElement("main");
-    const mainHeader = document.createElement("h2");
 
     content.id = "content";
+
+    content.append(sidebar, createMain());
+    document.body.append(header, content);
+}
+
+function sidebarClick(e) {
+    const content = document.querySelector("#content");
+    const button = e.target.closest(".nav__button");
+    if (!button) return;
+
+    state.view = button.dataset.view;
+    removeMain();
+    content.append(createMain());
+}
+
+function onSubmitTask(taskData){
+    //update the list
+    const content = document.querySelector("#content");
+    addTaskToList(state.tasks, taskData);
+    removeMain();
+    content.append(createMain());
+}
+
+function createMain(){
+    const main = document.createElement("main");
+    const mainHeader = document.createElement("h2");
+    const addTask = createAddTask(onSubmitTask);
+
     main.id = "main";
     main.classList.add("main");
     mainHeader.classList.add("main__header");
 
-    mainHeader.textContent = "Inbox";
+    mainHeader.textContent = state.view.charAt(0).toUpperCase() + state.view.slice(1);
 
-    main.append(mainHeader);
-    content.append(sidebar, main);
-    body.append(header, content);
-
-    // const testButton = document.createElement("button");
-    // testButton.textContent = "click me"
-    // testButton.addEventListener('click', () => {
-    //     const div = document.createElement("div");
-    // div.textContent = "test";
-    //     main.append(div)
-    // })
-
-    // main.append(testButton);
+    main.append(mainHeader, createInbox(state.tasks), addTask);
+    
+    return main;
 }
 
-function sidebarClick(e) {
-    console.log("sidebar click");
-    const button = e.target.closest(".nav__button");
-    if (!button) return;
-
+function removeMain(){
     const main = document.querySelector("main");
-    const view = button.dataset.view;
-    switch (view) {
-        case "inbox":
-            main.append(createInbox(allItems));
-    }
+    main.remove();
 }
+
+
 
 // const todoItem = new Item("title", "random description here", "8/19/25", "high")
 // const todayProjects = new Project("Coding Projects");

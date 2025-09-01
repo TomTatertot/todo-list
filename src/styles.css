@@ -167,17 +167,15 @@ body {
   left: 0;
   height: 20px;
   width: 20px;
-  border: 3px solid rgba(0, 26, 255, 0.6);
   border-radius: 50%;
   background-color: #eee;
+  border: 3px solid rgba(0, 0, 0, 0.6);
 }
 
-
-/* When the checkbox is checked, add a blue background */
-.task__checkbox:hover .task__checkmark,
-.task__checkbox input:checked~.task__checkmark {
-  background-color: rgba(0, 26, 255, 0.7);
-}
+.task__checkmark--priority-low{  border: 3px solid rgba(0, 26, 255, 0.6);}
+.task__checkmark--priority-medium{  border: 3px solid rgba(255, 153, 0, 0.627);}
+.task__checkmark--priority-high{  border: 3px solid rgba(255, 0, 0, 0.6);}
+.task__checkmark--priority-no{  border: 3px solid rgba(0, 0, 0, 0.6);}
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .task__checkmark:after {
@@ -198,7 +196,7 @@ body {
   top: 0px;
   width: 6px;
   height: 13px;
-  border: solid white;
+  border: solid rgb(0, 0, 0);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);

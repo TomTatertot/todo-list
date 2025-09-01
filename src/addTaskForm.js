@@ -1,6 +1,6 @@
 import plusCircleIcon from "./images/plus-circle-outline.svg";
 
-function createAddTask() {
+function createAddTask(callbackFn) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("main__wrapper");
 
@@ -33,17 +33,35 @@ function createAddTask() {
                     </div>
                 </form>`
 
-    attachTaskEvents(wrapper);
+    attachTaskEvents(wrapper, callbackFn);
     return wrapper;
 }
 
-function attachTaskEvents(container) {
+function attachTaskEvents(container, callbackFn) {
     const form = container.querySelector(".task-form");
     const addTaskBtn = container.querySelector(".main__add-task")
+    const cancelBtn = form.querySelector(".task-form__btn--cancel");
+    const submitBtn = form.querySelector(".task-form__btn--submit");
 
     addTaskBtn.addEventListener("click", () => {
         form.classList.remove("hidden");
     });
+    
+    cancelBtn.addEventListener("click", ()=> {
+        form.reset();
+        form.classList.add("hidden");
+    })
+
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        console.log(data);
+        callbackFn(data);
+
+        form.reset();
+    })
 }
 
 export default createAddTask;

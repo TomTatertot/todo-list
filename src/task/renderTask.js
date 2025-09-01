@@ -1,7 +1,4 @@
 function createTask(task) {
-    console.log("renderTask");
-    console.log(task);
-    console.log(task.priority);
     const taskHTML = document.createElement("li");
     const checkbox = createCheckbox(task.priority);
     const top = document.createElement("div");
@@ -27,7 +24,6 @@ function createTask(task) {
     top.append(checkbox, title, date);
     bottom.append(description);
 
-    console.log(taskHTML);
     return taskHTML;
 }
 
@@ -36,9 +32,8 @@ function createCheckbox(priority) {
     const input = document.createElement("input");
     const span = document.createElement("span");
 
-    console.log(priority);
-    label.classList.add("task__checkbox", `task__checkbox--priority-${priority}`);
-    span.classList.add("task__checkmark");
+    label.classList.add("task__checkbox");
+    span.classList.add("task__checkmark", `task__checkmark--priority-${priority.toLowerCase()}`);
 
     input.type = "checkbox";
 
