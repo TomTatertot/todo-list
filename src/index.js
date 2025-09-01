@@ -6,18 +6,20 @@ import Project from "./project.js";
 import { addTaskToList, removeTaskByID, getTaskById } from "./task/taskList.js";
 import createHeader from "./header.js"
 import createSidebar from "./sidebar.js";
-import createInbox from "./inbox.js";
+import createInbox from "./views.js/inbox.js";
+import createToday from "./views.js/today.js";
 import createAddTask from "./addTaskForm.js";
 
 const state = {
     tasks: [],
+    completed: [],
     view: "inbox",
 }
 
 addTaskToList(state.tasks,{
     title: "Gym",
     description: "Hit leg day today!",
-    date: "2025-08-15",
+    date: "2025-09-01",
     priority: "high"
 });
 
@@ -30,10 +32,10 @@ addTaskToList(state.tasks,{
 
 initializeWebpage();
 
+
+
 const sidebar = document.querySelector(".sidebar");
 sidebar.addEventListener("click", sidebarClick);
-
-
 
 function initializeWebpage() {
     const content = document.createElement("div");
@@ -57,7 +59,7 @@ function sidebarClick(e) {
     content.append(createMain());
 }
 
-function onSubmitTask(taskData){
+function onSubmitTaskForm(taskData){
     //update the list
     const content = document.querySelector("#content");
     addTaskToList(state.tasks, taskData);
@@ -68,7 +70,7 @@ function onSubmitTask(taskData){
 function createMain(){
     const main = document.createElement("main");
     const mainHeader = document.createElement("h2");
-    const addTask = createAddTask(onSubmitTask);
+    const addTask = createAddTask(onSubmitTaskForm);
 
     main.id = "main";
     main.classList.add("main");
@@ -76,10 +78,22 @@ function createMain(){
 
     mainHeader.textContent = state.view.charAt(0).toUpperCase() + state.view.slice(1);
 
-    main.append(mainHeader, createInbox(state.tasks), addTask);
+    main.append(mainHeader);
+
+    switch(state.view){
+        case "inbox":
+            main.append(createInbox(state.tasks));
+            break;
+        case "today":
+            main.append(createToday(state.tasks));
+            break;
+        default:
+            main.append(createInbox(state.tasks));
+    }
+    main.append(addTask);
     
     return main;
-}
+}   
 
 function removeMain(){
     const main = document.querySelector("main");

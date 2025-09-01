@@ -1,3 +1,5 @@
+import { formatDate } from "../utils";
+
 function createTask(task) {
     const taskHTML = document.createElement("li");
     const checkbox = createCheckbox(task.priority);
@@ -17,7 +19,7 @@ function createTask(task) {
     description.classList.add("task__description");
 
     title.textContent = task.title; 
-    date.textContent = task.date;
+    date.textContent = formatDate(task.date);
     description.textContent = task.description;
 
     taskHTML.append(top, bottom);
