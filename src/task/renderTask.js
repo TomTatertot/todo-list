@@ -1,6 +1,6 @@
 import { formatDate } from "../utils";
 
-function createTask(task) {
+function createTaskHTML(task) {
     const taskHTML = document.createElement("li");
     const checkbox = createCheckbox(task.priority);
     const top = document.createElement("div");
@@ -44,4 +44,4 @@ function createCheckbox(priority) {
     return label;
 }
 
-export default createTask;
+export default createTaskHTML;
