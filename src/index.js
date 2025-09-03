@@ -8,11 +8,11 @@ import createHeader from "./header.js"
 import createSidebar from "./sidebar.js";
 import createMain from "./main.js";
 import createAddTask from "./addTaskForm.js";
+import { isToday, isFuture, parseISO } from "date-fns";
 
 
 const state = {
     tasks: [],
-    completed: [],
     view: "inbox",
 }
 addTaskToList(state.tasks, {
@@ -49,15 +49,18 @@ function initializeWebpage() {
 
     const header = createHeader();
     const sidebar = createSidebar();
-    const main = createMain(state);
+    const main = createMain(state.view, filterTaskByView(state.view, state.tasks));
 
     content.append(sidebar);
     content.append(main);
     document.body.append(header, content);
 
-    const addTask = createAddTask(onSubmitTaskForm);
+    const addTask = createAddTask({ onSubmit: handleTaskFormSubmit });
     main.append(addTask);
 
+    bindTaskEvents();
+
+    console.log(filterTaskByView());
 }
 
 function sidebarClick(e) {
@@ -70,20 +73,60 @@ function sidebarClick(e) {
     resetMain();
 }
 
-function onSubmitTaskForm(taskData) {
+function handleTaskFormSubmit(taskData) {
     //update the list
     addTaskToList(state.tasks, taskData);
     resetMain();
 }
 
-function resetMain(){
+function bindTaskEvents() {
+    const taskList = document.querySelector(".main__task-list");
+    taskList.addEventListener("click", (e) => {
+        const taskEl = e.target.closest(".task");
+        const action = e.target.dataset.action;
+        console.log(action);
+        if (!action) {
+            const description = taskEl.querySelector(".task__description");
+            description.classList.toggle("shorten");
+            return;
+        }
+        else if (action === "task:toggle"){
+            const taskObj = state.tasks.find(item => taskEl.dataset.id === item.ID)
+            taskObj.completed = !taskObj.completed;
+            resetMain();
+            //
+        }
+    })
+
+
+}
+
+
+function resetMain() {
     const content = document.querySelector("#content");
     const main = document.querySelector(".main");
     main.remove();
 
-    const newMain = createMain(state);
-    newMain.append(createAddTask(onSubmitTaskForm));
+    const newMain = createMain(state.view, filterTaskByView(state.view, state.tasks));
+    newMain.append(createAddTask(handleTaskFormSubmit));
     content.append(newMain);
+    bindTaskEvents();
+
+}
+
+function filterTaskByView(view, tasks){
+    if (state.view === "today"){
+        return state.tasks.filter(task => isToday(parseISO(task.date)) && !task.completed);
+    }
+    else if (state.view === "inbox"){
+        return state.tasks.filter(task => !task.completed);
+    }
+    else if (state.view === "upcoming"){
+        return state.tasks.filter(task => isFuture(parseISO(task.date)) && !task.completed);
+    }
+    else if (state.view === "completed"){
+        return state.tasks.filter(task => task.completed);
+    }
 }
 
 

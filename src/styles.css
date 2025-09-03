@@ -150,6 +150,7 @@ body {
   display: flex;
   gap: 1rem;
   min-width: 100px;
+  justify-content: end;
 }
 
 .task__button {
@@ -238,7 +239,6 @@ body {
 }
 
 /* Show the checkmark when checked */
-.task__checkbox:hover .task__checkmark:after,
 .task__checkbox input:checked~.task__checkmark:after {
   display: block;
 }
