@@ -22,10 +22,10 @@ addTaskToList(state.tasks, {
     priority: "high"
 });
 addTaskToList(state.tasks, {
-    title: "Gym",
-    description: "Hit leg day today!",
+    title: "Take dog for a walk",
+    description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae quasi soluta labore dicta! Quia ducimus maiores veniam dicta aliquam perspiciatis sapiente molestias vero dolore a, delectus velit non temporibus quidem voluptate aperiam. Non minima dolor placeat doloribus iusto aliquid ipsum, alias debitis repudiandae enim officia praesentium repellat veniam quasi aliquam.",
     date: "2025-09-02",
-    priority: "high"
+    priority: "none"
 });
 
 addTaskToList(state.tasks, {
@@ -72,16 +72,13 @@ function sidebarClick(e) {
 
 function onSubmitTaskForm(taskData) {
     //update the list
-    const content = document.querySelector("#content");
-    const main = document.querySelector("main");
-    main.remove();
     addTaskToList(state.tasks, taskData);
     resetMain();
 }
 
 function resetMain(){
     const content = document.querySelector("#content");
-    const main = document.querySelector("main");
+    const main = document.querySelector(".main");
     main.remove();
 
     const newMain = createMain(state);

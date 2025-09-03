@@ -91,10 +91,25 @@ body {
   list-style-type: none;
 }
 
+.task:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.task:active{
+    background-color: white;
+}
+
 
 .task__top {
   display: flex;
 }
+
+.task__bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .task__data {
   display: flex;
@@ -103,7 +118,7 @@ body {
   font-size: 1.25rem;
 }
 
-.task__date{
+.task__date {
   flex-grow: 1;
   text-align: end;
 }
@@ -115,8 +130,35 @@ body {
   opacity: 0.6;
   padding-right: 8ch;
   padding-left: 2.2rem;
+  max-width: 60ch;
+
 }
 
+.shorten {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task__icon {
+  min-width: 20px;
+  min-height: 20px;
+}
+
+
+.task__button-container {
+  display: flex;
+  gap: 1rem;
+  min-width: 100px;
+}
+
+.task__button {
+  opacity: 1
+}
+
+.task__button:hover {
+  opacity: 0.5;
+}
 
 .main__add-task {
   display: flex;
@@ -172,10 +214,21 @@ body {
   border: 3px solid rgba(0, 0, 0, 0.6);
 }
 
-.task__checkmark--priority-low{  border: 3px solid rgba(0, 26, 255, 0.6);}
-.task__checkmark--priority-medium{  border: 3px solid rgba(255, 153, 0, 0.627);}
-.task__checkmark--priority-high{  border: 3px solid rgba(255, 0, 0, 0.6);}
-.task__checkmark--priority-no{  border: 3px solid rgba(0, 0, 0, 0.6);}
+.task__checkmark--priority-low {
+  border: 3px solid rgba(0, 26, 255, 0.6);
+}
+
+.task__checkmark--priority-medium {
+  border: 3px solid rgba(255, 153, 0, 0.627);
+}
+
+.task__checkmark--priority-high {
+  border: 3px solid rgba(255, 0, 0, 0.6);
+}
+
+.task__checkmark--priority-no {
+  border: 3px solid rgba(0, 0, 0, 0.6);
+}
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .task__checkmark:after {
@@ -215,7 +268,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.151);
 }
 
-.task-form.hidden{
+.hidden {
   display: none;
 }
 
