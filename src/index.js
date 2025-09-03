@@ -83,18 +83,36 @@ function bindTaskEvents() {
     const taskList = document.querySelector(".main__task-list");
     taskList.addEventListener("click", (e) => {
         const taskEl = e.target.closest(".task");
-        const action = e.target.dataset.action;
-        console.log(action);
-        if (!action) {
+        // let action = e.target.dataset.action;
+        console.log(e.target);
+        // if (!action) {
+        //     const description = taskEl.querySelector(".task__description");
+        //     description.classList.toggle("shorten");
+        //     return;
+        // }
+
+        const button = e.target.closest(".task__button");
+        if (!button){
             const description = taskEl.querySelector(".task__description");
             description.classList.toggle("shorten");
             return;
         }
-        else if (action === "task:toggle"){
-            const taskObj = state.tasks.find(item => taskEl.dataset.id === item.ID)
+        
+        let action = button.dataset.action;
+        console.log(action);
+        // if (!action);
+
+        if (action === "task:toggle") {
+            const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
             taskObj.completed = !taskObj.completed;
             resetMain();
             //
+        }
+        else if (action === "task:delete") {
+            console.log("in delete");
+            const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
+            state.tasks.splice(index, 1);
+            resetMain();
         }
     })
 
@@ -114,17 +132,17 @@ function resetMain() {
 
 }
 
-function filterTaskByView(view, tasks){
-    if (state.view === "today"){
-        return state.tasks.filter(task => isToday(parseISO(task.date)) && !task.completed);
-    }
-    else if (state.view === "inbox"){
+function filterTaskByView(view, tasks) {
+    if (state.view === "inbox") {
         return state.tasks.filter(task => !task.completed);
     }
-    else if (state.view === "upcoming"){
+    else if (state.view === "today") {
+        return state.tasks.filter(task => isToday(parseISO(task.date)) && !task.completed);
+    }
+    else if (state.view === "upcoming") {
         return state.tasks.filter(task => isFuture(parseISO(task.date)) && !task.completed);
     }
-    else if (state.view === "completed"){
+    else if (state.view === "completed") {
         return state.tasks.filter(task => task.completed);
     }
 }
