@@ -68,10 +68,11 @@ function sidebarClick(e) {
     if (button.dataset.view === "add project") {
         if (!document.querySelector(".project-form")) {
             const form = createProjectForm();
+            const projectList = e.target.closest(".nav__list--projects");
             // form.addEventListeners("submit", (e) => {
             //     const button = e.target.closest
             // })
-            button.insertAdjacentElement("afterend", form);
+            projectList.insertAdjacentElement("afterend", form);
         }
         return;
     }
@@ -95,6 +96,9 @@ function createProjectForm() {
     titleInput.type = "text";
     titleInput.placeholder = "Enter project name.."
 
+    const btnContainer = document.createElement("div");
+    btnContainer.classList.add("project-form__actions");
+
     const cancelBtn = document.createElement("button");
     cancelBtn.classList.add("project-form__btn", "project-form__btn--cancel");
     cancelBtn.textContent = "Cancel"
@@ -116,7 +120,8 @@ function createProjectForm() {
         resetSidebar();
     })
 
-    form.append(titleLabel, titleInput, cancelBtn, submitBtn);
+    btnContainer.append(cancelBtn, submitBtn);
+    form.append(titleLabel, titleInput, btnContainer);
     return form;
 }
 
