@@ -25,7 +25,7 @@ addTaskToList(state.tasks, {
     title: "Take dog for a walk",
     description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae quasi soluta labore dicta! Quia ducimus maiores veniam dicta aliquam perspiciatis sapiente molestias vero dolore a, delectus velit non temporibus quidem voluptate aperiam. Non minima dolor placeat doloribus iusto aliquid ipsum, alias debitis repudiandae enim officia praesentium repellat veniam quasi aliquam.",
     date: "2025-09-02",
-    priority: "none"
+    priority: ""
 });
 
 addTaskToList(state.tasks, {
@@ -55,7 +55,7 @@ function initializeWebpage() {
     content.append(main);
     document.body.append(header, content);
 
-    bindTaskEvents();
+    bindMainEvents();
 
     console.log(filterTaskByView());
 }
@@ -70,72 +70,39 @@ function sidebarClick(e) {
     resetMain();
 }
 
-function handleAddFormSubmit(taskData) {
+function handleAddFormSubmit(e) {
     //update the list
-    addTaskToList(state.tasks, taskData);
+    e.preventDefault();
+    const form = e.target.closest(".task-form");
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    addTaskToList(state.tasks, data);
     resetMain();
 }
 
-function handleEditFormSubmit(taskData){
-
+function handleEditFormSubmit(e, taskObj){
+    e.preventDefault();
+    const form = e.target.closest(".task-form");
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    taskObj.update(data);
+    resetMain();
 }
 
-function bindTaskEvents() {
-    const taskList = document.querySelector(".main__task-list");
-    taskList.addEventListener("click", (e) => {
-        const taskEl = e.target.closest(".task");
-        const button = e.target.closest(".task__button");
-        if (!button)
+function bindMainEvents() {
+    const main = document.querySelector(".main");
+    main.addEventListener("click", (e) => {
+        const actionElement = e.target.closest("[data-action]");
+        if (!actionElement) 
             return;
-
-        const action = button.dataset.action;
-        // if (button){
-        //     bindTaskButtonEvents(button);
-        // }
-        // if (!button){
-        //     const taskEl = e.target.closest(".task");
-        //     const description = taskEl.querySelector(".task__description");
-        //     description.classList.toggle("shorten");
-        //     return;
-        // }
-        
-        // let action = button.dataset.action;
-        // console.log(action);
-        // if (!action);
+        const action = actionElement.dataset.action;
+        console.log(action);
 
         if (action === "task:toggle") {
             const taskEl = e.target.closest(".task");
             const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
             taskObj.completed = !taskObj.completed;
             resetMain();
-            //
-        }
-        else if (action === "task:delete") {
-            const taskEl = e.target.closest(".task");
-            const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
-            state.tasks.splice(index, 1);
-            resetMain();
-        }
-        else if (action == "task:edit"){
-            const taskEl = e.target.closest(".task");
-            const form = createTaskForm({onSubmit: handleEditFormSubmit});
-            taskEl.insertAdjacentElement("afterend", form);
-            //create the form using the information of the task
-            
-        //     //then when user submits the form, the use form values to edit the element
-        }
-    })
-}
-
-function bindTaskButtonEvents(buttonEl){
-    const action = buttonEl.dataset.action;
-
-    if (action === "task:toggle") {
-            const taskEl = e.target.closest(".task");
-            const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
-            taskObj.completed = !taskObj.completed;
-            resetMain();
-            //
         }
         else if (action === "task:delete") {
             const taskEl = e.target.closest(".task");
@@ -145,37 +112,33 @@ function bindTaskButtonEvents(buttonEl){
         }
         else if (action === "task:edit"){
             const taskEl = e.target.closest(".task");
-            const form = createTaskForm(handleEditFormSubmit);
-            taskEl.insertAdjacentElement("afterend", form);
-            // bindTaskFormEvents(handleEditFormSubmit);
-            //create the form using the information of the task
-            
-            //then when user submits the form, the use form values to edit the element
-        }
+            const nextElement = taskEl.nextElementSibling;
+            if (nextElement && nextElement.classList.contains("task-form"))
+                return;
 
+            const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
+            const form = createTaskForm(taskObj);
+            form.addEventListener("submit", (e) => {
+                handleEditFormSubmit(e, taskObj);
+            });
+            taskEl.insertAdjacentElement("afterend", form);
+        }
+        else if (action === "task:add"){
+            const form = createTaskForm();
+            form.addEventListener("submit", handleAddFormSubmit);
+            const mainList = document.querySelector(".main__task-list");
+            mainList.append(form);
+        }
+        else if (action === "task:cancel"){
+            const form = e.target.closest(".task-form");
+            form.remove();
+        }
+    })
 }
 
-// function bindTaskFormEvents({onSubmit}){
-//     const form = document.querySelector(".task-form");
-//     const cancelBtn = form.querySelector(".task-form__btn--cancel");
-
-//     cancelBtn.addEventListener("click", () => {
-//         form.remove();
-//     })
-
-//     form.addEventListener("submit", (e) => {
-//         e.preventDefault();
-//         //create data object from form entries
-//         const formData = new FormData(form);
-//         const data = Object.fromEntries(formData);
-
-//         console.log(data);
-//         onSubmit(data);
-
-//         form.remove();
-//     })
-
-// }
+function bindFormEvents(form){
+    form.addEventListener("click")
+}
 
 function resetMain() {
     const content = document.querySelector("#content");
@@ -184,7 +147,7 @@ function resetMain() {
 
     const newMain = createMain(state.view, filterTaskByView(state.view, state.tasks), {onSubmit: handleAddFormSubmit});
     content.append(newMain);
-    bindTaskEvents();
+    bindMainEvents();
 
 }
 

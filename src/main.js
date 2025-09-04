@@ -22,9 +22,12 @@ function createMain(view, tasks, {onSubmit}) {
 
     tasks.forEach(task => mainList.append(createTaskHTML(task)));
 
-    addTaskBtn.addEventListener("click", () => {
-        main.append(createTaskForm({onSubmit}));
-    });
+    addTaskBtn.dataset.action = "task:add";
+
+    // addTaskBtn.addEventListener("click", () => {
+    //     if (!mainList.querySelector(".task-form"))
+    //         mainList.append(createTaskForm({onSubmit}));
+    // });
 
     return main;
 }

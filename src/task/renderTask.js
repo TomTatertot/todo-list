@@ -19,6 +19,7 @@ function createTaskHTML(taskObj) {
 
     taskHTML.classList.add("task");
     taskHTML.dataset.id = taskObj.ID;
+    taskHTML.dataset.action = "task:expand";
 
     top.classList.add("task__top");
     bottom.classList.add("task__bottom");

@@ -1,5 +1,4 @@
-
-function createTaskForm({onSubmit}) {
+function createTaskForm(initialValues = {}) {
     const form = document.createElement("form");
     form.classList.add("task-form");
 
@@ -24,11 +23,17 @@ function createTaskForm({onSubmit}) {
         </select>
 
         <div class="task-form__actions">
-            <button class="task-form__btn task-form__btn--cancel" type="button">Cancel</button>
-            <button class="task-form__btn task-form__btn--submit" type="submit">Submit</button>
+            <button class="task-form__btn task-form__btn--cancel" type="button" data-action="task:cancel">Cancel</button>
+            <button class="task-form__btn task-form__btn--submit" type="submit" data-action="task:submit">Submit</button>
         </div> `
 
-    attachTaskEvents(form, onSubmit);
+    //apply initial values to form fields if values exist
+    if (initialValues.title) form.querySelector("[name=title]").value = initialValues.title;
+    if (initialValues.description) form.querySelector("[name=description]").value = initialValues.description;
+    if (initialValues.date) form.querySelector("[name=date]").value = initialValues.date;
+    if (initialValues.priority) form.querySelector("[name=priority]").value = initialValues.priority;
+
+    // attachTaskEvents(form, onSubmit);
     return form;
 }
 
@@ -41,7 +46,6 @@ function attachTaskEvents(form, onSubmit) {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
         onSubmit(data);
