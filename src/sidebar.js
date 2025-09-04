@@ -4,8 +4,9 @@ import todayIcon from "./images/calendar-today.svg";
 import upcomingIcon from "./images/calendar-month.svg";
 import completedIcon from "./images/check-circle-outline.svg";
 import plusCircleIcon from "./images/plus-circle-outline.svg";
+import projectIcon from "./images/folder-outline.svg"
 
-function createSidebar() {
+function createSidebar(projects) {
     const sidebar = document.createElement("aside");
     const nav = document.createElement("nav");
 
@@ -24,7 +25,7 @@ function createSidebar() {
     nav.classList.add("nav");
 
     homeList.classList.add("nav__list");
-    projectList.classList.add("nav__list");
+    projectList.classList.add("nav__list", "nav__list--projects");
     projectHeader.classList.add("nav__header");
 
     projectHeader.textContent = "My Projects";
@@ -33,6 +34,7 @@ function createSidebar() {
     nav.append(homeList, projectHeader, projectList);
     homeList.append(inbox, today, upcoming, completed);
     projectList.append(addProjectBtn);
+    projects.forEach(project => projectList.append(createNavItem(projectIcon, project.name)));
 
     return sidebar;
 }

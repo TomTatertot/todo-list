@@ -2,7 +2,7 @@ import createTaskHTML from "./task/renderTask";
 import plusCircleIcon from "./images/plus-circle-outline.svg";
 import createTaskForm from "./taskForm";
 
-function createMain(view, tasks, {onSubmit}) {
+function createMain(view, tasks) {
     console.log(view);
 
     // console.log(views["inbox"]);
@@ -23,11 +23,6 @@ function createMain(view, tasks, {onSubmit}) {
     tasks.forEach(task => mainList.append(createTaskHTML(task)));
 
     addTaskBtn.dataset.action = "task:add";
-
-    // addTaskBtn.addEventListener("click", () => {
-    //     if (!mainList.querySelector(".task-form"))
-    //         mainList.append(createTaskForm({onSubmit}));
-    // });
 
     return main;
 }

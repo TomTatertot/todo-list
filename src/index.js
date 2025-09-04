@@ -13,6 +13,7 @@ import { isToday, isFuture, parseISO } from "date-fns";
 
 const state = {
     tasks: [],
+    projects: [],
     view: "inbox",
 }
 addTaskToList(state.tasks, {
@@ -39,8 +40,8 @@ initializeWebpage();
 
 
 
-const sidebar = document.querySelector(".sidebar");
-sidebar.addEventListener("click", sidebarClick);
+// const sidebar = document.querySelector(".sidebar");
+// sidebar.addEventListener("click", sidebarClick);
 
 function initializeWebpage() {
     const content = document.createElement("div");
@@ -48,29 +49,94 @@ function initializeWebpage() {
 
 
     const header = createHeader();
-    const sidebar = createSidebar();
-    const main = createMain(state.view, filterTaskByView(state.view, state.tasks), {onSubmit: handleAddFormSubmit});
+    const sidebar = createSidebar(state.projects);
+    const main = createMain(state.view, filterTasksByView(state.view, state.tasks));
 
     content.append(sidebar);
     content.append(main);
     document.body.append(header, content);
 
+    sidebar.addEventListener("click", sidebarClick);
     bindMainEvents();
 
-    console.log(filterTaskByView());
 }
 
 function sidebarClick(e) {
-    const content = document.querySelector("#content");
-    const main = document.querySelector("main");
     const button = e.target.closest(".nav__button");
     if (!button) return;
+
+    if (button.dataset.view === "add project") {
+        if (!document.querySelector(".project-form")) {
+            const form = createProjectForm();
+            // form.addEventListeners("submit", (e) => {
+            //     const button = e.target.closest
+            // })
+            button.insertAdjacentElement("afterend", form);
+        }
+        return;
+    }
 
     state.view = button.dataset.view;
     resetMain();
 }
 
-function handleAddFormSubmit(e) {
+function createProjectForm() {
+    const form = document.createElement("form");
+    form.classList.add("project-form");
+
+    const titleLabel = document.createElement("label");
+    titleLabel.classList.add("project-form__label");
+    titleLabel.htmlFor = "title";
+
+    const titleInput = document.createElement("input");
+    titleInput.classList.add("project-form__input");
+    titleInput.id = "title";
+    titleInput.name = "title";
+    titleInput.type = "text";
+    titleInput.placeholder = "Enter project name.."
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.classList.add("project-form__btn", "project-form__btn--cancel");
+    cancelBtn.textContent = "Cancel"
+
+    const submitBtn = document.createElement("button");
+    submitBtn.classList.add("project-form__btn", "project-form__btn--submit");
+    submitBtn.textContent = "Add Project";
+
+    cancelBtn.addEventListener("click", () => {
+        form.remove();
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const project = new Project(titleInput.value);
+        state.projects.push(project);
+        form.remove();
+        resetSidebar();
+    })
+
+    form.append(titleLabel, titleInput, cancelBtn, submitBtn);
+    return form;
+}
+
+// function createProjectHTML(projectName) {
+//     const button = document.createElement("button");
+//     button.classList.add("nav__button");
+//     button.type = "button";
+
+//     const img = document.createElement("img");
+//     img.classList.add("nav__icon");
+
+//     const span = 
+
+//     <button class="nav__button" type="button">
+//         <img src="./images/calendar-month.svg" class="nav__icon">
+//             <span class="nav__label">Upcoming</span>
+//     </button>
+// }
+
+function handleAddTask(e) {
     //update the list
     e.preventDefault();
     const form = e.target.closest(".task-form");
@@ -80,7 +146,7 @@ function handleAddFormSubmit(e) {
     resetMain();
 }
 
-function handleEditFormSubmit(e, taskObj){
+function handleEditTask(e, taskObj) {
     e.preventDefault();
     const form = e.target.closest(".task-form");
     const formData = new FormData(form);
@@ -93,7 +159,7 @@ function bindMainEvents() {
     const main = document.querySelector(".main");
     main.addEventListener("click", (e) => {
         const actionElement = e.target.closest("[data-action]");
-        if (!actionElement) 
+        if (!actionElement)
             return;
         const action = actionElement.dataset.action;
         console.log(action);
@@ -110,7 +176,7 @@ function bindMainEvents() {
             state.tasks.splice(index, 1);
             resetMain();
         }
-        else if (action === "task:edit"){
+        else if (action === "task:edit") {
             const taskEl = e.target.closest(".task");
             const nextElement = taskEl.nextElementSibling;
             if (nextElement && nextElement.classList.contains("task-form"))
@@ -119,25 +185,21 @@ function bindMainEvents() {
             const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
             const form = createTaskForm(taskObj);
             form.addEventListener("submit", (e) => {
-                handleEditFormSubmit(e, taskObj);
+                handleEditTask(e, taskObj);
             });
             taskEl.insertAdjacentElement("afterend", form);
         }
-        else if (action === "task:add"){
+        else if (action === "task:add") {
             const form = createTaskForm();
-            form.addEventListener("submit", handleAddFormSubmit);
+            form.addEventListener("submit", handleAddTask);
             const mainList = document.querySelector(".main__task-list");
             mainList.append(form);
         }
-        else if (action === "task:cancel"){
+        else if (action === "task:cancel") {
             const form = e.target.closest(".task-form");
             form.remove();
         }
     })
-}
-
-function bindFormEvents(form){
-    form.addEventListener("click")
 }
 
 function resetMain() {
@@ -145,13 +207,20 @@ function resetMain() {
     const main = document.querySelector(".main");
     main.remove();
 
-    const newMain = createMain(state.view, filterTaskByView(state.view, state.tasks), {onSubmit: handleAddFormSubmit});
+    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks));
     content.append(newMain);
     bindMainEvents();
 
 }
 
-function filterTaskByView(view, tasks) {
+function resetSidebar(){
+    const oldSidebar = document.querySelector(".sidebar");
+    const newSidebar = createSidebar(state.projects);
+    oldSidebar.replaceWith(newSidebar);
+    newSidebar.addEventListener("click", sidebarClick);
+}
+
+function filterTasksByView(view, tasks) {
     if (state.view === "inbox") {
         return state.tasks.filter(task => !task.completed);
     }
@@ -165,40 +234,6 @@ function filterTaskByView(view, tasks) {
         return state.tasks.filter(task => task.completed);
     }
 }
-
-
-
-
-// const todoItem = new Item("title", "random description here", "8/19/25", "high")
-// const todayProjects = new Project("Coding Projects");
-
-// todayProjects.addItem({
-//     title: "title",
-//     description: "random description",
-//     dueDate: "8/20/25",
-//     priority: "high"
-// });
-
-// console.log("Before remove:", JSON.stringify(todayProjects.itemList, null, 2));
-
-// const itemID = todayProjects.itemList[0].ID;
-// const item = todayProjects.getItemById(itemID);
-// console.log(item);
-
-// item.toggleCompleted();
-// item.update({
-//     title: "changedTitle",
-//     description: "changed",
-// })
-// console.log(item);
-
-
-
-// todayProjects.removeItemByID(itemID);
-
-// console.log("After remove:", JSON.stringify(todayProjects.itemList, null, 2));
-
-
 
 
 

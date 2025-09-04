@@ -33,24 +33,6 @@ function createTaskForm(initialValues = {}) {
     if (initialValues.date) form.querySelector("[name=date]").value = initialValues.date;
     if (initialValues.priority) form.querySelector("[name=priority]").value = initialValues.priority;
 
-    // attachTaskEvents(form, onSubmit);
     return form;
 }
-
-function attachTaskEvents(form, onSubmit) {
-    const cancelBtn = form.querySelector(".task-form__btn--cancel");
-
-    cancelBtn.addEventListener("click", () => {
-        form.remove();
-    })
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        onSubmit(data);
-        form.remove();
-    })
-}
-
 export default createTaskForm;

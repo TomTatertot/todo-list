@@ -74,22 +74,4 @@ function createButton(iconSrc, buttonName){
     return button;
 }
 
-
-
-function handleTaskClick(e, taskHTML){
-    const action = e.target.dataset.action;
-    if (!action)
-    {
-        const description = taskHTML.querySelector(".task__description");
-        description.classList.toggle("shorten");
-        return;
-    }
-
-    if (action === "task:toggle"){
-        //remove from list
-        //reset main
-    }
-}
-
-
 export default createTaskHTML;
