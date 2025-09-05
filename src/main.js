@@ -1,6 +1,5 @@
 import createTaskHTML from "./task/renderTask";
 import plusCircleIcon from "./images/plus-circle-outline.svg";
-import createTaskForm from "./taskForm";
 
 function createMain(view, tasks) {
     console.log(view);
@@ -16,7 +15,7 @@ function createMain(view, tasks) {
     mainHeader.classList.add("main__header");
     mainList.classList.add("main__task-list");
 
-    mainHeader.textContent = view.charAt(0).toUpperCase() + view.slice(1);
+    mainHeader.textContent = view;
 
     main.append(mainHeader, mainList, addTaskBtn);
 

@@ -89,10 +89,17 @@ body {
   padding: 0.8rem 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   list-style-type: none;
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+
+.task--completed{
+  background-color: rgba(18, 56, 161, 0.15);
+
 }
 
 .task:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(18, 56, 161, 0.1);
   cursor: pointer;
 }
 

@@ -1,4 +1,4 @@
-function createTaskForm(initialValues = {}) {
+function createTaskForm(projects, initialValues = {}) {
     const form = document.createElement("form");
     form.classList.add("task-form");
 
@@ -21,6 +21,9 @@ function createTaskForm(initialValues = {}) {
             <option value="medium">Medium</option>
             <option value="low">Low</option>
         </select>
+        <label class="task-form__label" for="project">Project:</label>
+        <select class="task-form__select" id="project" name="project">
+        </select>
 
         <div class="task-form__actions">
             <button class="task-form__btn task-form__btn--cancel" type="button" data-action="task:cancel">Cancel</button>
@@ -33,6 +36,21 @@ function createTaskForm(initialValues = {}) {
     if (initialValues.date) form.querySelector("[name=date]").value = initialValues.date;
     if (initialValues.priority) form.querySelector("[name=priority]").value = initialValues.priority;
 
+
+    const select = form.querySelector("#project");
+    const defaultOption = document.createElement("option");
+   
+    defaultOption.value = "";
+    defaultOption.textContent = "None";
+
+    select.append(defaultOption);
+    projects.forEach(project => {
+        const option = document.createElement("option");
+        option.value = project.name;
+        option.textContent = project.name;
+        select.append(option);
+    })
+    
     return form;
 }
 export default createTaskForm;

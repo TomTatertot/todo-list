@@ -1,4 +1,4 @@
-import { formatDate } from "../utils";
+import {format, parseISO, isThisYear} from "date-fns";
 import closeIcon from "../images/close.svg"
 import pencilIcon from "../images/pencil.svg"
 
@@ -18,6 +18,8 @@ function createTaskHTML(taskObj) {
     const editBtn = createButton(pencilIcon, "Edit");
 
     taskHTML.classList.add("task");
+    if (taskObj.completed) 
+        taskHTML.classList.add("task--completed");
     taskHTML.dataset.id = taskObj.ID;
     taskHTML.dataset.action = "task:expand";
 
@@ -72,6 +74,16 @@ function createButton(iconSrc, buttonName){
 
     button.append(img);
     return button;
+}
+
+function formatDate(date){
+
+    if (isThisYear(date)){
+        return format(parseISO(date), "MMM d");
+    }
+    else{
+        return format(parseISO(date), "MMM d, yyyy");
+    }
 }
 
 export default createTaskHTML;

@@ -34,29 +34,35 @@ function createSidebar(projects) {
     nav.append(homeList, projectHeader, projectList);
     homeList.append(inbox, today, upcoming, completed);
     projectList.append(addProjectBtn);
-    projects.forEach(project => projectList.append(createNavItem(projectIcon, project.name)));
+
+    projects.forEach(project => {
+        const projectNav = createNavItem(projectIcon, project.name);
+        projectList.append(projectNav);
+    });
 
     return sidebar;
 }
 
-function createNavItem(iconSrc, text){
+function createNavItem(iconSrc, text,) {
     const li = document.createElement("li");
-    const button = document.createElement("button");
-    const img = document.createElement("img");
-    const span = document.createElement("span");
-
     li.classList.add("nav__item");
+    
+    const button = document.createElement("button");
     button.classList.add("nav__button");
-    img.classList.add("nav__icon");
-    span.classList.add("nav__label");
+    button.type = "button";
+    button.dataset.view = text; //add dataset.view to delagate which nav button is clicked later
 
-    button.dataset.view = text.toLowerCase(); //add dataset.view to delagate which nav button is clicked later
+    
+    const img = document.createElement("img");
+    img.classList.add("nav__icon");
     img.src = iconSrc;
     img.alt = "";
-
-    button.type = "button";
-    span.textContent = text;
     
+    const span = document.createElement("span");
+    span.classList.add("nav__label");
+    span.textContent = text;
+
+
     li.append(button);
     button.append(img, span);
 
