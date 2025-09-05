@@ -70,25 +70,62 @@ function loadLocalStorage() {
 }
 
 function sidebarClick(e) {
-    const button = e.target.closest("[data-view]");
-    if (!button) return;
+    const selectedButton = e.target.closest(".nav__button--selected");
+    if (selectedButton)
+        selectedButton.classList.remove(".nav__button--selected");
 
-    const view = button.dataset.view;
-    if (!view) return;
-
-    if (view === "Add Project" && !document.querySelector(".project-form")) {
-        const {form, titleInput, cancelBtn} = createProjectForm();
-        bindProjectFormEvents(form, titleInput, cancelBtn);
-        const projectList = e.target.closest(".nav__list--projects");
-        projectList.insertAdjacentElement("afterend", form);
+    if (e.target.closest("[data-view]")) {
+        const button = e.target.closest("[data-view]");
+        const view = button.dataset.view;
+        if (view === "Add Project" && !document.querySelector(".project-form")) {
+            renderAddProjectForm();
+        }
+        else {
+            state.view = view;
+            resetMain();
+        }
         return;
     }
+    else if (e.target.closest("[data-action]")) {
+        const button = e.target.closest("[data-action]");
+        const action = button.dataset.action;
+        if (action === "project:delete") {
+            const navItem = e.target.closest(".nav__item");
+            const projectLabel = navItem.querySelector(".nav__label");
+            const projectObj = getProject(projectLabel.textContent);
+            const index = state.projects.indexOf(projectObj);
+            state.projects.splice(index, 1);
+            resetSidebar();
+            saveLocalStorage();
+        }
+    }
 
-    state.view = view;
-    resetMain();
+    // const view = button.dataset.view;
+    // if (!view) {
+    //     handleViewButton()
+    // }
+
+
+    // if (view === "Add Project" && !document.querySelector(".project-form")) {
+    //     const { form, titleInput, cancelBtn } = createProjectForm();
+    //     bindProjectFormEvents(form, titleInput, cancelBtn);
+    //     const projectList = e.target.closest(".nav__list--projects");
+    //     projectList.insertAdjacentElement("afterend", form);
+    //     return;
+    // }
+
+    // state.view = view;
+    // resetMain();
 }
 
-function bindProjectFormEvents(form, titleInput, cancelBtn){
+function renderAddProjectForm() {
+    const { form, titleInput, cancelBtn } = createProjectForm();
+    bindProjectFormEvents(form, titleInput, cancelBtn);
+    const projectList = document.querySelector(".nav__list--projects");
+    projectList.insertAdjacentElement("afterend", form);
+}
+
+function bindProjectFormEvents(form, titleInput, cancelBtn) {
     cancelBtn.addEventListener("click", () => {
         form.remove();
     })
@@ -117,8 +154,7 @@ function handleAddTask(e) {
     //update the list
     e.preventDefault();
     const form = e.target.closest(".task-form");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(new FormData(form));
     addTaskToList(state.tasks, data);
     if (data.project !== "") {
         const project = getProject(data.project);
@@ -132,8 +168,7 @@ function handleAddTask(e) {
 function handleEditTask(e, taskObj) {
     e.preventDefault();
     const form = e.target.closest(".task-form");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(new FormData(form));
     if (data.project !== "") {
         const project = getProject(data.project);
         addTaskToList(project.taskList, data);

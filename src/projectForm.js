@@ -12,6 +12,7 @@ function createProjectForm(){
         titleInput.name = "title";
         titleInput.type = "text";
         titleInput.placeholder = "Enter project name.."
+        titleInput.required = true;
     
         const btnContainer = document.createElement("div");
         btnContainer.classList.add("project-form__actions");

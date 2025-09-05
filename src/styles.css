@@ -42,6 +42,11 @@ body {
   padding-left: 0.5rem;
 }
 
+.nav__item{
+  display: flex;
+  justify-content: space-between;
+}
+
 .nav__header {
   margin: 0.5rem 1rem;
 }
@@ -49,6 +54,11 @@ body {
 .nav__icon {
   width: 20px;
   height: 20px;
+}
+
+.nav__button--delete{
+  display: flex;
+  justify-content: end;
 }
 
 .nav__button {
@@ -62,7 +72,7 @@ body {
   width: 100%;
 }
 
-.nav__button:hover {
+.nav__item:hover {
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
