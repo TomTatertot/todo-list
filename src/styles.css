@@ -31,7 +31,7 @@ body {
 
 .sidebar {
   height: 85vh;
-  width: 30vw;
+  width: 20vw;
   font-size: 1.1rem;
 }
 
@@ -42,10 +42,11 @@ body {
   padding-left: 0.5rem;
 }
 
-.nav__item{
+.nav__item {
   display: flex;
   justify-content: space-between;
 }
+
 
 .nav__header {
   margin: 0.5rem 1rem;
@@ -56,10 +57,10 @@ body {
   height: 20px;
 }
 
-.nav__button--delete{
-  display: flex;
-  justify-content: end;
+.nav__button--selected {
+  background-color: rgba(0, 0, 0, 0.204);
 }
+
 
 .nav__button {
   display: flex;
@@ -72,8 +73,28 @@ body {
   width: 100%;
 }
 
+.nav__button--delete {
+  display: flex;
+  width: auto;
+  justify-content: end;
+  padding: 0rem 0.5rem;
+}
+
+.nav__button--delete .nav__icon {
+  opacity: 0;
+}
+
+.nav__item:hover .nav__button--delete .nav__icon {
+  opacity: 1;
+}
+
 .nav__item:hover {
   background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.nav__button--add-project:hover {
+  background-color: rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
@@ -103,7 +124,7 @@ body {
   border-radius: 10px;
 }
 
-.task--completed{
+.task--completed {
   background-color: rgba(18, 56, 161, 0.15);
 
 }
@@ -111,10 +132,6 @@ body {
 .task:hover {
   background-color: rgba(18, 56, 161, 0.1);
   cursor: pointer;
-}
-
-.task:active {
-  background-color: white;
 }
 
 
@@ -168,6 +185,11 @@ body {
   gap: 1rem;
   min-width: 100px;
   justify-content: end;
+  opacity: 0;
+}
+
+.task:hover .task__button-container{
+  opacity: 1;
 }
 
 .task__button {
@@ -295,7 +317,7 @@ body {
   margin-bottom: 0.5rem;
   display: block;
   color: #333;
-}
+} 
 
 .task-form__input,
 .task-form__select {
@@ -372,15 +394,15 @@ body {
   gap: 1rem;
 }
 
-.project-form__buttons {
+/* .project-form__buttons {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border: none;
   border-radius: 8px;
-}
+} */
 
 .project-form__btn {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   font-size: 1rem;
   border: none;
   border-radius: 8px;

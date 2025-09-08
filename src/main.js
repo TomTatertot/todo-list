@@ -2,7 +2,6 @@ import createTaskHTML from "./task/renderTask";
 import plusCircleIcon from "./images/plus-circle-outline.svg";
 
 function createMain(view, tasks) {
-    console.log(view);
 
     // console.log(views["inbox"]);
     const main = document.createElement("main");

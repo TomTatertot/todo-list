@@ -7,101 +7,113 @@ import plusCircleIcon from "./images/plus-circle-outline.svg";
 import folderIcon from "./images/folder-outline.svg";
 import closeIcon from "./images/close.svg";
 
+const views = [
+    { title: "Inbox", iconSrc: inboxIcon },
+    { title: "Today", iconSrc: todayIcon },
+    { title: "Upcoming", iconSrc: upcomingIcon },
+    { title: "Completed", iconSrc: completedIcon },
+    // { title: "Add Project", iconSrc: plusCircleIcon },
+]
+
 function createSidebar(projects) {
+
     const sidebar = document.createElement("aside");
-    const nav = document.createElement("nav");
-
-    const homeList = document.createElement("ul");
-    const projectList = document.createElement("ul");
-
-    const projectHeader = document.createElement("h3");
-
-    const inbox = createViewItem(inboxIcon, "Inbox");
-    const today = createViewItem(todayIcon, "Today");
-    const upcoming = createViewItem(upcomingIcon, "Upcoming");
-    const completed = createViewItem(completedIcon, "Completed");
-    const addProjectBtn = createViewItem(plusCircleIcon, "Add Project");
-
     sidebar.classList.add("sidebar");
+
+    const nav = document.createElement("nav");
     nav.classList.add("nav");
 
+    const homeList = document.createElement("ul");
     homeList.classList.add("nav__list");
-    projectList.classList.add("nav__list", "nav__list--projects");
-    projectHeader.classList.add("nav__header");
 
+    const projectList = document.createElement("ul");
+    projectList.classList.add("nav__list", "nav__list--projects");
+
+    const projectHeader = document.createElement("h3");
+    projectHeader.classList.add("nav__header");
     projectHeader.textContent = "My Projects";
 
-    sidebar.append(nav);
-    nav.append(homeList, projectHeader, projectList);
-    homeList.append(inbox, today, upcoming, completed);
-    projectList.append(addProjectBtn);
+    const addProjectBtn = createButton({
+        btnClass: "nav__button--add-project",
+        btnText: "Add Project",
+        btnImgSrc: plusCircleIcon,
+        btnImgAlt: "Add Project"    
+    });
+    
+    addProjectBtn.dataset.role = "add-project";
+    views.forEach(view => {
+        homeList.append(createViewItem(view.title, view.iconSrc));
+    });
 
     projects.forEach(project => {
         const projectNav = createProjectItem(project.name);
         projectList.append(projectNav);
     });
 
+    nav.append(homeList, projectHeader, projectList, addProjectBtn);
+    sidebar.append(nav);
+
     return sidebar;
 }
 
-function createViewItem(iconSrc, text) {
+function createViewItem(text, iconSrc) {
     const li = document.createElement("li");
     li.classList.add("nav__item");
+
+    const viewButton = createButton({
+        btnClass: "nav__button--view",
+        btnImgSrc: iconSrc,
+        btnText: text
+    })
+    viewButton.dataset.view = text; //add dataset.view to delagate which nav button is clicked later
+    viewButton.dataset.role = "view";
+
+    li.append(viewButton);
+
+    return li;
+}
+
+function createProjectItem(text) {
+    const li = document.createElement("li");
+    li.classList.add("nav__item");
+
+    const projectBtn = createButton({
+        btnClass: "nav__button--project",
+        btnText: text,
+        btnImgSrc: folderIcon
+    });
+    projectBtn.dataset.role = "view";
+    projectBtn.dataset.view = text;
     
-    const button = document.createElement("button");
-    button.classList.add("nav__button");
-    button.type = "button";
-    button.dataset.view = text; //add dataset.view to delagate which nav button is clicked later
-    
+    const deleteBtn = createButton({
+        btnClass: "nav__button--delete",
+        btnImgSrc: closeIcon,
+        btnImgAlt: "Delete project"
+    });
+    deleteBtn.dataset.role = "delete";
+
+    li.append(projectBtn, deleteBtn);
+    return li;
+}
+
+function createButton({ btnClass, btnText = null, btnImgSrc, btnImgAlt = "" }) {
+    const btn = document.createElement("button");
+    btn.classList.add("nav__button", btnClass);
+    btn.type = "button";
+
     const img = document.createElement("img");
     img.classList.add("nav__icon");
-    img.src = iconSrc;
-    img.alt = "";
-    
-    const span = document.createElement("span");
-    span.classList.add("nav__label");
-    span.textContent = text;
+    img.src = btnImgSrc;
+    img.alt = btnImgAlt;
+    btn.append(img);
 
+    if (btnText) {
+        const span = document.createElement("span");
+        span.classList.add("nav__label");
+        span.textContent = btnText;
+        btn.append(span);
+    }
 
-    li.append(button);
-    button.append(img, span);
-
-    return li;
+    return btn
 }
-
-function createProjectItem(text){
-    const li = document.createElement("li");
-    li.classList.add("nav__item");
-    
-    const projectBtn = document.createElement("button");
-    projectBtn.classList.add("nav__button");
-    projectBtn.type = "button";
-    projectBtn.dataset.view = text; //add dataset.view to delagate which nav button is clicked later
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("nav__button", "nav__button--delete");
-    deleteBtn.type = "button";
-    deleteBtn.dataset.action = "project:delete"; //add dataset.view to delagate which nav button is clicked later
-    
-    const projectIcon = document.createElement("img");
-    projectIcon.classList.add("nav__icon");
-    projectIcon.src = folderIcon;
-    projectIcon.alt = "";
-
-    const deleteIcon = document.createElement("img");
-    deleteIcon.classList.add("nav__icon");
-    deleteIcon.src = closeIcon;
-    deleteIcon.alt = "Delete project"; 
-    
-    const span = document.createElement("span");
-    span.classList.add("nav__label");
-    span.textContent = text;
-
-    
-    li.append(projectBtn, deleteBtn);
-    projectBtn.append(projectIcon, span);
-    deleteBtn.append(deleteIcon)
-    return li;
-}
-
 export default createSidebar;

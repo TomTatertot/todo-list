@@ -29,10 +29,10 @@ function initializeWebpage() {
     const content = document.createElement("div");
     content.id = "content";
 
-
     const header = createHeader();
     const sidebar = createSidebar(state.projects);
     const main = createMain(state.view, filterTasksByView(state.view, state.tasks));
+    
 
     content.append(sidebar);
     content.append(main);
@@ -70,52 +70,36 @@ function loadLocalStorage() {
 }
 
 function sidebarClick(e) {
-    const selectedButton = e.target.closest(".nav__button--selected");
-    if (selectedButton)
-        selectedButton.classList.remove(".nav__button--selected");
-
-    if (e.target.closest("[data-view]")) {
-        const button = e.target.closest("[data-view]");
-        const view = button.dataset.view;
-        if (view === "Add Project" && !document.querySelector(".project-form")) {
-            renderAddProjectForm();
-        }
-        else {
-            state.view = view;
-            resetMain();
-        }
+    const button = e.target.closest("button");
+    if (!button)
         return;
+
+    const role = button.dataset.role;
+
+    switch (role) {
+        case "view":
+            state.view = button.dataset.view;
+            resetMain();
+            break;
+        case "add-project":
+            if (!document.querySelector(".project-form"))
+                renderAddProjectForm();
+            break;
+        case "delete":
+            const project = e.target.closest(".nav__item");
+            const projectLabel = project.querySelector(".nav__label");
+            const projectName = projectLabel.textContent;
+            deleteProject(projectName);
+            break;
     }
-    else if (e.target.closest("[data-action]")) {
-        const button = e.target.closest("[data-action]");
-        const action = button.dataset.action;
-        if (action === "project:delete") {
-            const navItem = e.target.closest(".nav__item");
-            const projectLabel = navItem.querySelector(".nav__label");
-            const projectObj = getProject(projectLabel.textContent);
-            const index = state.projects.indexOf(projectObj);
-            state.projects.splice(index, 1);
-            resetSidebar();
-            saveLocalStorage();
-        }
-    }
+}
 
-    // const view = button.dataset.view;
-    // if (!view) {
-    //     handleViewButton()
-    // }
-
-
-    // if (view === "Add Project" && !document.querySelector(".project-form")) {
-    //     const { form, titleInput, cancelBtn } = createProjectForm();
-    //     bindProjectFormEvents(form, titleInput, cancelBtn);
-    //     const projectList = e.target.closest(".nav__list--projects");
-    //     projectList.insertAdjacentElement("afterend", form);
-    //     return;
-    // }
-
-    // state.view = view;
-    // resetMain();
+function deleteProject(projectName) {
+    const project = getProject(projectName);
+    const index = state.projects.indexOf(project);
+    state.projects.splice(index, 1);
+    resetSidebar();
+    saveLocalStorage();
 }
 
 function renderAddProjectForm() {
@@ -192,12 +176,14 @@ function bindMainEvents() {
             const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
             taskObj.completed = !taskObj.completed;
             taskEl.classList.add("task--completed");
+            saveLocalStorage();
             resetMain();
         }
         else if (action === "task:delete") {
             const taskEl = e.target.closest(".task");
             const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
             state.tasks.splice(index, 1);
+            saveLocalStorage();
             resetMain();
         }
         else if (action === "task:edit") {
@@ -255,7 +241,7 @@ function filterTasksByView(view, tasks) {
     else if (state.view === "Completed") {
         return tasks.filter(task => task.completed);
     }
-    else {
+    else{
         const project = getProject(view);
         return project.taskList;
     }

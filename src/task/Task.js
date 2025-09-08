@@ -1,23 +1,20 @@
 
 export default class Task{
     ID  = crypto.randomUUID();
-    completed = false;
  
-    constructor({title, description, date, priority}){
+    constructor({title, description, date, priority, completed = false}){
         this.title = title;
         this.description = description;
         this.date = date;
-        this.priority = priority;   
+        this.priority = priority; 
+        this.completed = completed;  
     }
 
-    toggleCompleted(){
-        this.completed = !this.completed;
-    }
-
-    update({title, description, date, priority}){
+    update({title, description, date, priority, completed = false}){
         this.title = title;
         this.description = description;
         this.date = date;
         this.priority = priority;
+        this.completed = completed;  
     }
 }                          
