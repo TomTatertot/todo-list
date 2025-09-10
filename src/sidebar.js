@@ -60,6 +60,10 @@ function createViewItem(text, iconSrc) {
     const li = document.createElement("li");
     li.classList.add("nav__item");
 
+    if (text === "Inbox"){
+        li.classList.add("nav__item--selected");
+    }
+
     const viewButton = createButton({
         btnClass: "nav__button--view",
         btnImgSrc: iconSrc,
@@ -83,7 +87,8 @@ function createProjectItem(text) {
         btnImgSrc: folderIcon
     });
     projectBtn.dataset.role = "view";
-    projectBtn.dataset.view = text;
+    projectBtn.dataset.view = "Project";
+    projectBtn.dataset.id = text;
     
     const deleteBtn = createButton({
         btnClass: "nav__button--delete",

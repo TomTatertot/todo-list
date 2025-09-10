@@ -8,7 +8,7 @@
 }
 
 body {
-  font-family: Montserrat;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, Noto, Oxygen-Sans, Ubuntu, Cantrell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .header {
@@ -32,14 +32,13 @@ body {
 .sidebar {
   height: 85vh;
   width: 20vw;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .nav__list {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  padding-left: 0.5rem;
 }
 
 .nav__item {
@@ -57,8 +56,8 @@ body {
   height: 20px;
 }
 
-.nav__button--selected {
-  background-color: rgba(0, 0, 0, 0.204);
+.nav__item--selected {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 
@@ -89,12 +88,12 @@ body {
 }
 
 .nav__item:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.03);
   cursor: pointer;
 }
 
 .nav__button--add-project:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
@@ -107,7 +106,7 @@ body {
 .main__header {
   font-size: 2rem;
   margin-bottom: 2rem;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .add-task__icon {
@@ -278,7 +277,8 @@ body {
 }
 
 /* Show the checkmark when checked */
-.task__checkbox input:checked~.task__checkmark:after {
+.task__checkbox input:checked~.task__checkmark:after,
+.task__checkbox input:hover~.task__checkmark:after {
   display: block;
 }
 
@@ -419,4 +419,45 @@ body {
 
 .project-form__btn--submit:hover {
   background-color: #0056b3;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 320px;
+  text-align: center;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+.modal__btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.modal__btn--cancel {
+  background: #ccc;
+}
+
+.modal__btn--delete {
+  background: #e63946;
+  color: white;
 }

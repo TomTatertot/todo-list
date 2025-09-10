@@ -38,8 +38,10 @@ function createTaskForm(projects, initialValues = {}) {
 
 
     const select = form.querySelector("#project");
+    // if (Array.isArray(projects) && projects.length > 0){
+    //     const defaultOption = document.createElement
+    // }
     const defaultOption = document.createElement("option");
-   
     defaultOption.value = "";
     defaultOption.textContent = "None";
 
@@ -50,7 +52,11 @@ function createTaskForm(projects, initialValues = {}) {
         option.textContent = project.name;
         select.append(option);
     })
-    
+
+    if (initialValues.project) {
+        select.value = initialValues.project;
+    }
+
     return form;
 }
 export default createTaskForm;

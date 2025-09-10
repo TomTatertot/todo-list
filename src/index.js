@@ -9,13 +9,17 @@ import createSidebar from "./sidebar.js";
 import createMain from "./main.js";
 import createTaskForm from "./taskForm.js";
 import createProjectForm from "./projectForm.js";
-import { isToday, isFuture, parseISO, compareAsc } from "date-fns";
+import createConfirmModal from "./confirmModal.js";
+import { isToday, isFuture, parseISO, compareAsc, format, startOfToday } from "date-fns";
 
 
 const state = {
     tasks: [],
     projects: [],
-    view: "Inbox",
+    view: {
+        type: "Inbox",
+    },
+
 }
 
 initializeWebpage();
@@ -32,7 +36,7 @@ function initializeWebpage() {
     const header = createHeader();
     const sidebar = createSidebar(state.projects);
     const main = createMain(state.view, filterTasksByView(state.view, state.tasks));
-    
+
 
     content.append(sidebar);
     content.append(main);
@@ -74,11 +78,23 @@ function sidebarClick(e) {
     if (!button)
         return;
 
+    highlightNavItem(e);
     const role = button.dataset.role;
 
     switch (role) {
         case "view":
-            state.view = button.dataset.view;
+            const viewType = button.dataset.view;
+            if (viewType === "Project") {
+                state.view = {
+                    type: viewType,
+                    id: button.dataset.id
+                }
+            }
+            else {
+                state.view = {
+                    type: viewType,
+                }
+            }
             resetMain();
             break;
         case "add-project":
@@ -86,20 +102,51 @@ function sidebarClick(e) {
                 renderAddProjectForm();
             break;
         case "delete":
-            const project = e.target.closest(".nav__item");
-            const projectLabel = project.querySelector(".nav__label");
+            const projectElement = e.target.closest(".nav__item");
+            const projectLabel = projectElement.querySelector(".nav__label");
             const projectName = projectLabel.textContent;
-            deleteProject(projectName);
+            const projectObj = getProject(projectName);
+
+            createConfirmModal({
+                message: `Are you sure you want to delete ${projectName}? All of its task will be permanently deleted.`,
+                onConfirm: () => {
+                    deleteTasksFromProject(projectObj)
+                    deleteProject(projectObj);
+                },
+            });
+
             break;
     }
 }
 
-function deleteProject(projectName) {
-    const project = getProject(projectName);
+function deleteProject(project) {
     const index = state.projects.indexOf(project);
     state.projects.splice(index, 1);
     resetSidebar();
     saveLocalStorage();
+}
+
+function deleteTasksFromProject(project) {
+    const newTasks = state.tasks.filter(item => !project.taskList.includes(item));
+    state.tasks = newTasks;
+    saveLocalStorage();
+    resetMain();
+}
+
+function highlightNavItem(e) {
+    const navItem = e.target.closest(".nav__item");
+    if (!navItem) {
+        return;
+    }
+
+    const selected = document.querySelector(".nav__item--selected");
+    if (selected) {
+        selected.classList.remove("nav__item--selected");
+    }
+
+    if (navItem)
+
+        navItem.classList.add("nav__item--selected");
 }
 
 function renderAddProjectForm() {
@@ -134,35 +181,6 @@ function bindProjectFormEvents(form, titleInput, cancelBtn) {
     });
 }
 
-function handleAddTask(e) {
-    //update the list
-    e.preventDefault();
-    const form = e.target.closest(".task-form");
-    const data = Object.fromEntries(new FormData(form));
-    addTaskToList(state.tasks, data);
-    if (data.project !== "") {
-        const project = getProject(data.project);
-        addTaskToList(project.taskList, data);
-        sortTaskListByDate(project.taskList);
-    }
-    saveLocalStorage();
-    resetMain();
-}
-
-function handleEditTask(e, taskObj) {
-    e.preventDefault();
-    const form = e.target.closest(".task-form");
-    const data = Object.fromEntries(new FormData(form));
-    if (data.project !== "") {
-        const project = getProject(data.project);
-        addTaskToList(project.taskList, data);
-        sortTaskListByDate(project.taskList);
-    }
-    taskObj.update(data);
-    saveLocalStorage();
-    resetMain();
-}
-
 function bindMainEvents() {
     const main = document.querySelector(".main");
     main.addEventListener("click", (e) => {
@@ -171,46 +189,110 @@ function bindMainEvents() {
             return;
         const action = actionElement.dataset.action;
 
-        if (action === "task:toggle") {
-            const taskEl = e.target.closest(".task");
-            const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
-            taskObj.completed = !taskObj.completed;
-            taskEl.classList.add("task--completed");
-            saveLocalStorage();
-            resetMain();
-        }
-        else if (action === "task:delete") {
-            const taskEl = e.target.closest(".task");
-            const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
-            state.tasks.splice(index, 1);
-            saveLocalStorage();
-            resetMain();
-        }
-        else if (action === "task:edit") {
-            const taskEl = e.target.closest(".task");
-            const nextElement = taskEl.nextElementSibling;
-            if (nextElement && nextElement.classList.contains("task-form"))
-                return;
-
-            const taskObj = getTaskById(state.tasks, taskEl.dataset.id);
-            const form = createTaskForm(state.projects, taskObj);
-            form.addEventListener("submit", (e) => {
-                handleEditTask(e, taskObj);
-            });
-            taskEl.insertAdjacentElement("afterend", form);
-        }
-        else if (action === "task:add") {
-            const form = createTaskForm(state.projects);
-            form.addEventListener("submit", handleAddTask);
-            const mainList = document.querySelector(".main__task-list");
-            mainList.append(form);
-        }
-        else if (action === "task:cancel") {
-            const form = e.target.closest(".task-form");
-            form.remove();
+        switch (action) {
+            case "task:toggle":
+                toggleTask(e);
+                break;
+            case "task:delete":
+                deleteTask(e);
+                break;
+            case "task:edit":
+                editTask(e);
+                break;
+            case "task:add":
+                addTaskForm(e);
+                break;
+            case "task:cancel":
+                cancelTaskForm(e);
+                break;
         }
     })
 }
+
+function toggleTask(e) {
+    const taskEl = e.target.closest(".task");
+    const taskObj = state.tasks.find(task => taskEl.dataset.id === task.ID)
+    taskObj.completed = !taskObj.completed;
+    taskEl.classList.add("task--completed");
+    saveLocalStorage();
+    resetMain();
+}
+
+function deleteTask(e) {
+    const taskEl = e.target.closest(".task");
+    const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
+    state.tasks.splice(index, 1);
+    saveLocalStorage();
+    resetMain();
+}
+
+function editTask(e) {
+    const taskEl = e.target.closest(".task");
+    const nextElement = taskEl.nextElementSibling;
+    if (nextElement && nextElement.classList.contains("task-form"))
+        return;
+
+    const taskObj = getTaskById(state.tasks, taskEl.dataset.id);
+    const form = createTaskForm(state.projects, taskObj);
+    console.log(taskObj);
+    form.addEventListener("submit", (e) => {
+        submitEditForm(e, taskObj);
+    });
+    taskEl.insertAdjacentElement("afterend", form);
+}
+
+function addTaskForm(e) {
+    let initialValues = {};
+    const viewType = state.view.type;
+    if (viewType === "Project") {
+        initialValues.project = state.view.id;
+    }
+    else if (viewType === "Today") {
+        const today = startOfToday();
+        initialValues.date = format(today, 'yyyy-MM-dd');
+    }
+    const form = createTaskForm(state.projects, initialValues);
+    form.addEventListener("submit", submitAddTask);
+    const mainList = document.querySelector(".main__task-list");
+    mainList.append(form);
+}
+
+function submitAddTask(e) {
+    //update the list
+    e.preventDefault();
+    const form = e.target.closest(".task-form");
+    const data = Object.fromEntries(new FormData(form));
+    const task = new Task(data);
+    addTaskToList(state.tasks, task);
+    if (data.project !== "") {
+        const project = getProject(data.project);
+        addTaskToList(project.taskList, task);
+        sortTaskListByDate(project.taskList);
+    }
+    sortTaskListByDate(state.tasks);
+    saveLocalStorage();
+    resetMain();
+}
+
+function cancelTaskForm(e) {
+    const form = e.target.closest(".task-form");
+    form.remove();
+}
+
+function submitEditForm(e, taskObj) {
+    e.preventDefault();
+    const form = e.target.closest(".task-form");
+    const data = Object.fromEntries(new FormData(form));
+    taskObj.update(data);
+    if (data.project !== "") {
+        const project = getProject(data.project);
+        addTaskToList(project.taskList, taskObj);
+        sortTaskListByDate(project.taskList);
+    }
+    saveLocalStorage();
+    resetMain();
+}
+
 
 function resetMain() {
     const main = document.querySelector(".main");
@@ -229,21 +311,19 @@ function resetSidebar() {
 }
 
 function filterTasksByView(view, tasks) {
-    if (state.view === "Inbox") {
-        return tasks.filter(task => !task.completed);
-    }
-    else if (state.view === "Today") {
-        return tasks.filter(task => isToday(parseISO(task.date)) && !task.completed);
-    }
-    else if (state.view === "Upcoming") {
-        return tasks.filter(task => isFuture(parseISO(task.date)) && !task.completed);
-    }
-    else if (state.view === "Completed") {
-        return tasks.filter(task => task.completed);
-    }
-    else{
-        const project = getProject(view);
-        return project.taskList;
+
+    switch (view.type) {
+        case "Inbox":
+            return tasks.filter(task => !task.completed);
+        case "Today":
+            return tasks.filter(task => isToday(parseISO(task.date)) && !task.completed);
+        case "Upcoming":
+            return tasks.filter(task => isFuture(parseISO(task.date)) && !task.completed);
+        case "Completed":
+            return tasks.filter(task => task.completed);
+        case "Project":
+            const project = getProject(view.id);
+            return project.taskList;
     }
 }
 

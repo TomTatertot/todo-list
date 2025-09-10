@@ -14,7 +14,7 @@ function createMain(view, tasks) {
     mainHeader.classList.add("main__header");
     mainList.classList.add("main__task-list");
 
-    mainHeader.textContent = view;
+    mainHeader.textContent = view.type === "Project" ? view.id : view.type;
 
     main.append(mainHeader, mainList, addTaskBtn);
 

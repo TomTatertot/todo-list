@@ -1,7 +1,7 @@
 import Task from "./Task.js"
 
-export function addTaskToList(taskList, ...taskData) {
-    taskList.push(new Task(...taskData));
+export function addTaskToList(taskList, taskObj) {
+    taskList.push(taskObj);
 }
 
 export function removeTaskByID(taskList, taskID) {
