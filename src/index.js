@@ -24,11 +24,7 @@ const state = {
 
 initializeWebpage();
 
-// const sidebar = document.querySelector(".sidebar");
-// sidebar.addEventListener("click", sidebarClick);
-
 function initializeWebpage() {
-    // localStorage.clear();
     loadLocalStorage();
     sortTaskListByDate(state.tasks);
     const content = document.createElement("div");
@@ -36,7 +32,7 @@ function initializeWebpage() {
 
     const header = createHeader();
     const sidebar = createSidebar(state.projects);
-    const main = createMain(state.view, filterTasksByView(state.view, state.tasks));
+    const main = createMain(state.view, filterTasksByView(state.view, state.tasks), delegateMainClick);
 
 
     content.append(sidebar);
@@ -44,7 +40,7 @@ function initializeWebpage() {
     document.body.append(header, content);
 
     sidebar.addEventListener("click", sidebarClick);
-    bindMainEvents();
+    // bindMainEvents();
 }
 
 function saveLocalStorage() {
@@ -175,29 +171,29 @@ function checkProjectFormValidity(titleInput) {
     }
 }
 
-function bindMainEvents() {
-    const main = document.querySelector(".main");
-    main.addEventListener("click", (e) => {
-        const actionElement = e.target.closest("[data-action]");
-        if (!actionElement)
-            return;
-        const action = actionElement.dataset.action;
+function delegateMainClick(e) {
+    // const main = document.querySelector(".main");
+    // main.addEventListener("click", (e) => {
+    const actionElement = e.target.closest("[data-action]");
+    if (!actionElement)
+        return;
+    const action = actionElement.dataset.action;
 
-        switch (action) {
-            case "task:toggle":
-                toggleTask(e);
-                break;
-            case "task:delete":
-                deleteTask(e);
-                break;
-            case "task:edit":
-                editTask(e);
-                break;
-            case "task:add":
-                addTaskForm(e);
-                break;
-        }
-    })
+    switch (action) {
+        case "task:toggle":
+            toggleTask(e);
+            break;
+        case "task:delete":
+            deleteTask(e);
+            break;
+        case "task:edit":
+            editTask(e);
+            break;
+        case "main:add-task":
+            addTaskForm(e);
+            break;
+    }
+    // })
 }
 
 function toggleTask(e) {
@@ -215,22 +211,19 @@ function deleteTask(e) {
     removeTaskByID(state.tasks, taskID);
     state.projects.forEach(project => {
         removeTaskByID(project.taskList, taskID);
-    })
-
-    // const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
-    // state.tasks.splice(index, 1);
+    });
     saveLocalStorage();
     resetMain();
 }
 
-function editTask(e) {    
+function editTask(e) {
     if (document.querySelector(".task-form"))
         return;
 
     const taskEl = e.target.closest(".task");
     const taskObj = getTaskById(state.tasks, taskEl.dataset.id);
     const form = createTaskForm({
-        projects: state.projects, 
+        projects: state.projects,
         initialValues: taskObj,
         onSubmit: (formData) => {
             submitEditForm(formData, taskObj)
@@ -264,7 +257,7 @@ function addTaskForm(e) {
         data.date = format(startOfToday(), 'yyyy-MM-dd');
     }
     const form = createTaskForm({
-        projects: state.projects, 
+        projects: state.projects,
         initialValues: data,
         onSubmit: submitAddTask
     });
@@ -287,10 +280,10 @@ function submitAddTask(formData) {
 
 function resetMain() {
     const main = document.querySelector(".main");
-    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks));
+    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks), delegateMainClick);
 
     main.replaceWith(newMain);
-    bindMainEvents();
+    // bindMainEvents();
     sortTaskListByDate(state.tasks);
 }
 

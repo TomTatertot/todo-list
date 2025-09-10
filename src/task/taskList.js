@@ -1,5 +1,3 @@
-import Task from "./Task.js"
-
 export function addTaskToList(taskList, taskObj) {
     taskList.push(taskObj);
 }
