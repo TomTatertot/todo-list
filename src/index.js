@@ -150,36 +150,55 @@ function highlightNavItem(e) {
 }
 
 function renderAddProjectForm() {
-    const { form, titleInput, cancelBtn } = createProjectForm();
-    bindProjectFormEvents(form, titleInput, cancelBtn);
+    const form = createProjectForm({
+        appendTo: projectList,
+        onSubmit: submitProjectForm,
+        onInput: checkProjectFormValidity
+    })
     const projectList = document.querySelector(".nav__list--projects");
     projectList.insertAdjacentElement("afterend", form);
 }
 
-function bindProjectFormEvents(form, titleInput, cancelBtn) {
-    cancelBtn.addEventListener("click", () => {
-        form.remove();
-    })
-
-    titleInput.addEventListener("input", () => {
-        const title = titleInput.value;
-        if (state.projects.some(project => project.name === title)) {
-            titleInput.setCustomValidity("This project title already exists!");
-        }
-        else {
-            titleInput.setCustomValidity("");
-        }
-    });
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const newProject = new Project({ name: titleInput.value });
-        state.projects.push(newProject);
-        saveLocalStorage();
-        resetSidebar();
-        form.remove();
-    });
+function submitProjectForm(projectName) {
+    const newProject = new Project({ name: projectName });
+    state.projects.push(newProject);
+    saveLocalStorage();
+    resetSidebar();
 }
+
+function checkProjectFormValidity(titleInput) {
+    if (state.projects.some(project => project.name === titleInput.value)) {
+        titleInput.setCustomValidity("This project title already exists!");
+    }
+    else {
+        titleInput.setCustomValidity("");
+    }
+}
+
+// function bindProjectFormEvents(form, titleInput, cancelBtn) {
+//     cancelBtn.addEventListener("click", () => {
+//         form.remove();
+//     })
+
+//     titleInput.addEventListener("input", () => {
+//         const title = titleInput.value;
+//         if (state.projects.some(project => project.name === title)) {
+//             titleInput.setCustomValidity("This project title already exists!");
+//         }
+//         else {
+//             titleInput.setCustomValidity("");
+//         }
+//     });
+
+//     form.addEventListener("submit", (e) => {
+//         e.preventDefault();
+//         const newProject = new Project({ name: titleInput.value });
+//         state.projects.push(newProject);
+//         saveLocalStorage();
+//         resetSidebar();
+//         form.remove();
+//     });
+// }
 
 function bindMainEvents() {
     const main = document.querySelector(".main");
