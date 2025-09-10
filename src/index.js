@@ -28,6 +28,7 @@ initializeWebpage();
 // sidebar.addEventListener("click", sidebarClick);
 
 function initializeWebpage() {
+    // localStorage.clear();
     loadLocalStorage();
     sortTaskListByDate(state.tasks);
     const content = document.createElement("div");
@@ -151,7 +152,6 @@ function highlightNavItem(e) {
 
 function renderAddProjectForm() {
     const form = createProjectForm({
-        appendTo: projectList,
         onSubmit: submitProjectForm,
         onInput: checkProjectFormValidity
     })
@@ -175,31 +175,6 @@ function checkProjectFormValidity(titleInput) {
     }
 }
 
-// function bindProjectFormEvents(form, titleInput, cancelBtn) {
-//     cancelBtn.addEventListener("click", () => {
-//         form.remove();
-//     })
-
-//     titleInput.addEventListener("input", () => {
-//         const title = titleInput.value;
-//         if (state.projects.some(project => project.name === title)) {
-//             titleInput.setCustomValidity("This project title already exists!");
-//         }
-//         else {
-//             titleInput.setCustomValidity("");
-//         }
-//     });
-
-//     form.addEventListener("submit", (e) => {
-//         e.preventDefault();
-//         const newProject = new Project({ name: titleInput.value });
-//         state.projects.push(newProject);
-//         saveLocalStorage();
-//         resetSidebar();
-//         form.remove();
-//     });
-// }
-
 function bindMainEvents() {
     const main = document.querySelector(".main");
     main.addEventListener("click", (e) => {
@@ -221,9 +196,6 @@ function bindMainEvents() {
             case "task:add":
                 addTaskForm(e);
                 break;
-            case "task:cancel":
-                cancelTaskForm(e);
-                break;
         }
     })
 }
@@ -239,72 +211,38 @@ function toggleTask(e) {
 
 function deleteTask(e) {
     const taskEl = e.target.closest(".task");
-    const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
-    state.tasks.splice(index, 1);
+    const taskID = taskEl.dataset.id;
+    removeTaskByID(state.tasks, taskID);
+    state.projects.forEach(project => {
+        removeTaskByID(project.taskList, taskID);
+    })
+
+    // const index = state.tasks.findIndex(task => taskEl.dataset.id === task.ID);
+    // state.tasks.splice(index, 1);
     saveLocalStorage();
     resetMain();
 }
 
-function editTask(e) {
-    const taskEl = e.target.closest(".task");
-    const nextElement = taskEl.nextElementSibling;
-    if (nextElement && nextElement.classList.contains("task-form"))
+function editTask(e) {    
+    if (document.querySelector(".task-form"))
         return;
 
+    const taskEl = e.target.closest(".task");
     const taskObj = getTaskById(state.tasks, taskEl.dataset.id);
-    const form = createTaskForm(state.projects, taskObj);
-    console.log(taskObj);
-    form.addEventListener("submit", (e) => {
-        submitEditForm(e, taskObj);
+    const form = createTaskForm({
+        projects: state.projects, 
+        initialValues: taskObj,
+        onSubmit: (formData) => {
+            submitEditForm(formData, taskObj)
+        }
     });
     taskEl.insertAdjacentElement("afterend", form);
 }
 
-function addTaskForm(e) {
-    let initialValues = {};
-    const viewType = state.view.type;
-    if (viewType === "Project") {
-        initialValues.project = state.view.id;
-    }
-    else if (viewType === "Today") {
-        const today = startOfToday();
-        initialValues.date = format(today, 'yyyy-MM-dd');
-    }
-    const form = createTaskForm(state.projects, initialValues);
-    form.addEventListener("submit", submitAddTask);
-    const mainList = document.querySelector(".main__task-list");
-    mainList.append(form);
-}
-
-function submitAddTask(e) {
-    //update the list
-    e.preventDefault();
-    const form = e.target.closest(".task-form");
-    const data = Object.fromEntries(new FormData(form));
-    const task = new Task(data);
-    addTaskToList(state.tasks, task);
-    if (data.project !== "") {
-        const project = getProject(data.project);
-        addTaskToList(project.taskList, task);
-        sortTaskListByDate(project.taskList);
-    }
-    sortTaskListByDate(state.tasks);
-    saveLocalStorage();
-    resetMain();
-}
-
-function cancelTaskForm(e) {
-    const form = e.target.closest(".task-form");
-    form.remove();
-}
-
-function submitEditForm(e, taskObj) {
-    e.preventDefault();
-    const form = e.target.closest(".task-form");
-    const data = Object.fromEntries(new FormData(form));
-    taskObj.update(data);
-    if (data.project !== "") {
-        const project = getProject(data.project);
+function submitEditForm(formData, taskObj) {
+    taskObj.update(formData);
+    if (formData.project !== "") {
+        const project = getProject(formData.project);
         addTaskToList(project.taskList, taskObj);
         sortTaskListByDate(project.taskList);
     }
@@ -312,6 +250,40 @@ function submitEditForm(e, taskObj) {
     resetMain();
 }
 
+
+function addTaskForm(e) {
+    if (document.querySelector(".task-form"))
+        return;
+
+    let data = {};
+    const viewType = state.view.type;
+    if (viewType === "Project") {
+        data.project = state.view.id;
+    }
+    else if (viewType === "Today") {
+        data.date = format(startOfToday(), 'yyyy-MM-dd');
+    }
+    const form = createTaskForm({
+        projects: state.projects, 
+        initialValues: data,
+        onSubmit: submitAddTask
+    });
+    const mainList = document.querySelector(".main__task-list");
+    mainList.append(form);
+}
+
+function submitAddTask(formData) {
+    const task = new Task(formData);
+    addTaskToList(state.tasks, task);
+    if (formData.project !== "") {
+        const project = getProject(formData.project);
+        addTaskToList(project.taskList, task);
+        sortTaskListByDate(project.taskList);
+    }
+    sortTaskListByDate(state.tasks);
+    saveLocalStorage();
+    resetMain();
+}
 
 function resetMain() {
     const main = document.querySelector(".main");
@@ -355,6 +327,5 @@ function sortTaskListByDate(taskList) {
 function getProject(name) {
     return state.projects.find(project => project.name === name);
 }
-
 
 

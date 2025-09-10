@@ -36,7 +36,6 @@ function createProjectForm({ onCancel, onSubmit, onInput }) {
         titleInput.addEventListener("input", () => {
                 console.log(onInput);
                 onInput(titleInput);
-                const title = titleInput.value;
         });
 
         form.addEventListener("submit", (e) => {

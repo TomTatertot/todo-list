@@ -1,4 +1,4 @@
-function createTaskForm(projects, initialValues = {}) {
+function createTaskForm({projects, initialValues = {}, onSubmit}) {
     const form = document.createElement("form");
     form.classList.add("task-form");
 
@@ -56,6 +56,17 @@ function createTaskForm(projects, initialValues = {}) {
     if (initialValues.project) {
         select.value = initialValues.project;
     }
+
+    form.addEventListener("submit", (e) =>{
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form));
+        onSubmit(data);
+    })
+
+    const cancelBtn = form.querySelector(".task-form__btn--cancel");
+    cancelBtn.addEventListener("click", () => {
+        form.remove();
+    });
 
     return form;
 }
