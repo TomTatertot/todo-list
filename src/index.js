@@ -31,16 +31,13 @@ function initializeWebpage() {
     content.id = "content";
 
     const header = createHeader();
-    const sidebar = createSidebar(state.projects);
-    const main = createMain(state.view, filterTasksByView(state.view, state.tasks), delegateMainClick);
+    const sidebar = createSidebar(state.projects, onViewClick, onDeleteProject, onAddProject);
+    const main = createMain(state.view, filterTasksByView(state.view, state.tasks), onMainClick);
 
 
     content.append(sidebar);
     content.append(main);
     document.body.append(header, content);
-
-    sidebar.addEventListener("click", sidebarClick);
-    // bindMainEvents();
 }
 
 function saveLocalStorage() {
@@ -70,55 +67,28 @@ function loadLocalStorage() {
     }
 }
 
-function sidebarClick(e) {
-    const button = e.target.closest("button");
-    if (!button)
-        return;
-
-    highlightNavItem(e);
-    const role = button.dataset.role;
-
-    switch (role) {
-        case "view":
-            const viewType = button.dataset.view;
-            if (viewType === "Project") {
-                state.view = {
-                    type: viewType,
-                    id: button.dataset.id
-                }
-            }
-            else {
-                state.view = {
-                    type: viewType,
-                }
-            }
-            resetMain();
-            break;
-        case "add-project":
-            if (!document.querySelector(".project-form"))
-                renderAddProjectForm();
-            break;
-        case "delete":
-            const projectElement = e.target.closest(".nav__item");
-            const projectLabel = projectElement.querySelector(".nav__label");
-            const projectName = projectLabel.textContent;
-            const projectObj = getProject(projectName);
-
-            createConfirmModal({
-                message: `Are you sure you want to delete ${projectName}? All of its task will be permanently deleted.`,
-                onConfirm: () => {
-                    deleteTasksFromProject(projectObj)
-                    deleteProject(projectObj);
-                },
-            });
-
-            break;
-    }
+function onViewClick(viewType, projectID) {
+    state.view.type = viewType;
+    if (projectID)
+        state.view.projectID = projectID;
+    resetMain();
 }
 
+function onDeleteProject(projectName) {
+    const project = getProject(projectName);
+    createConfirmModal({
+        message: `Are you sure you want to delete ${projectName}? All of its task will be permanently deleted.`,
+        onConfirm: () => {
+            deleteTasksFromProject(project);
+            deleteProject(project);
+        },
+    });
+}
 function deleteProject(project) {
     const index = state.projects.indexOf(project);
     state.projects.splice(index, 1);
+    state.view.type = "Inbox";
+    resetMain();
     resetSidebar();
     saveLocalStorage();
 }
@@ -130,23 +100,10 @@ function deleteTasksFromProject(project) {
     resetMain();
 }
 
-function highlightNavItem(e) {
-    const navItem = e.target.closest(".nav__item");
-    if (!navItem) {
+function onAddProject() {
+    if (document.querySelector(".project-form"))
         return;
-    }
 
-    const selected = document.querySelector(".nav__item--selected");
-    if (selected) {
-        selected.classList.remove("nav__item--selected");
-    }
-
-    if (navItem)
-
-        navItem.classList.add("nav__item--selected");
-}
-
-function renderAddProjectForm() {
     const form = createProjectForm({
         onSubmit: submitProjectForm,
         onInput: checkProjectFormValidity
@@ -171,9 +128,7 @@ function checkProjectFormValidity(titleInput) {
     }
 }
 
-function delegateMainClick(e) {
-    // const main = document.querySelector(".main");
-    // main.addEventListener("click", (e) => {
+function onMainClick(e) {
     const actionElement = e.target.closest("[data-action]");
     if (!actionElement)
         return;
@@ -248,17 +203,17 @@ function addTaskForm(e) {
     if (document.querySelector(".task-form"))
         return;
 
-    let data = {};
+    let initialTaskData = {};
     const viewType = state.view.type;
     if (viewType === "Project") {
-        data.project = state.view.id;
+        initialTaskData.project = state.view.projectID;
     }
     else if (viewType === "Today") {
-        data.date = format(startOfToday(), 'yyyy-MM-dd');
+        initialTaskData.date = format(startOfToday(), 'yyyy-MM-dd');
     }
     const form = createTaskForm({
         projects: state.projects,
-        initialValues: data,
+        initialValues: initialTaskData,
         onSubmit: submitAddTask
     });
     const mainList = document.querySelector(".main__task-list");
@@ -280,18 +235,16 @@ function submitAddTask(formData) {
 
 function resetMain() {
     const main = document.querySelector(".main");
-    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks), delegateMainClick);
+    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks), onMainClick);
 
     main.replaceWith(newMain);
-    // bindMainEvents();
     sortTaskListByDate(state.tasks);
 }
 
 function resetSidebar() {
     const oldSidebar = document.querySelector(".sidebar");
-    const newSidebar = createSidebar(state.projects);
+    const newSidebar = createSidebar(state.projects, onViewClick, onDeleteProject, onAddProject);
     oldSidebar.replaceWith(newSidebar);
-    newSidebar.addEventListener("click", sidebarClick);
 }
 
 function filterTasksByView(view, tasks) {
@@ -306,7 +259,7 @@ function filterTasksByView(view, tasks) {
         case "Completed":
             return tasks.filter(task => task.completed);
         case "Project":
-            const project = getProject(view.id);
+            const project = getProject(view.projectID);
             return project.taskList;
     }
 }

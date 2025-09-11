@@ -10,14 +10,14 @@ function createMain(view, tasks, onClick) {
 
     const mainHeader = document.createElement("h2");
     mainHeader.classList.add("main__header");
-    mainHeader.textContent = view.type === "Project" ? view.id : view.type;
+    mainHeader.textContent = view.type === "Project" ? view.projectID : view.type;
 
     const mainList = document.createElement("ul");
     mainList.classList.add("main__task-list");
 
     const addTaskBtn = createAddTaskBtn();
     addTaskBtn.dataset.action = "main:add-task";
-    
+
     main.append(mainHeader, mainList, addTaskBtn);
     tasks.forEach(task => mainList.append(createTaskHTML(task)));
 
@@ -28,7 +28,7 @@ function createMain(view, tasks, onClick) {
     return main;
 }
 
-function createAddTaskBtn(){
+function createAddTaskBtn() {
     const addTaskBtn = document.createElement("button");
     const addTaskImg = document.createElement("img");
 
