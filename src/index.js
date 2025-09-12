@@ -235,10 +235,9 @@ function submitAddTask(formData) {
 
 function resetMain() {
     const main = document.querySelector(".main");
-    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks), onMainClick);
-
-    main.replaceWith(newMain);
     sortTaskListByDate(state.tasks);
+    const newMain = createMain(state.view, filterTasksByView(state.view, state.tasks), onMainClick);
+    main.replaceWith(newMain);
 }
 
 function resetSidebar() {
