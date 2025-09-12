@@ -4,13 +4,13 @@ import "./reset.css"
 import Task from "./task/Task.js"
 import Project from "./project.js";
 import { addTaskToList, removeTaskByID, getTaskById } from "./task/taskList.js";
-import createHeader from "./header.js"
-import createSidebar from "./sidebar.js";
-import createMain from "./main.js";
-import createFooter from "./footer.js";
-import createTaskForm from "./taskForm.js";
-import createProjectForm from "./projectForm.js";
-import createConfirmModal from "./confirmModal.js";
+import createHeader from "./UI/header.js"
+import createSidebar from "./UI/sidebar.js";
+import createMain from "./UI/main.js";
+import createFooter from "./UI/footer.js";
+import createTaskForm from "./UI/taskForm.js";
+import createProjectForm from "./UI/projectForm.js";
+import createConfirmModal from "./UI/confirmModal.js";
 import { isToday, isFuture, parseISO, compareAsc, format, startOfToday } from "date-fns";
 
 
