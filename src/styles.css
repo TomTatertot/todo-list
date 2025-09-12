@@ -1,6 +1,6 @@
 /* styles.css */
 :root {
-  --primary-color: rgba(18, 57, 161, 0.52);
+  --primary-color: rgba(34, 133, 208, 0.911);
   --secondary-color: rgba(252, 56, 7, 0.836);
   --background-color: white;
   --font-color: black;
@@ -13,20 +13,47 @@ body {
 
 .header {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  gap:0.5rem; 
+  height: 5vh;
+  /* padding-left: 1rem; */
+  padding: 2rem 1rem;
 
-  height: 10vh;
+  /* background-color: var(--primary-color); */
+  color: var(--primary-color);
+  font-size: 1rem;
+}
 
+.header img {
+  /* display: inline; */
+  height: 35px;
+  width: 35px;
+}
+
+.footer {
+  text-align:center ;
+  margin-top: 2rem;
+}
+
+.footer a {
+  color: var(--primary-color);
+}
+
+.footer img {
+  display: inline;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.footer img:hover {
   background-color: var(--primary-color);
-  color: white;
-  font-size: 1.5rem;
 }
 
 #content {
   display: flex;
   flex-direction: row;
-  padding-top: 5vh;
 }
 
 .sidebar {
@@ -97,6 +124,10 @@ body {
   cursor: pointer;
 }
 
+.nav__button--add-project{
+  color: var(--primary-color);
+}
+
 .main {
   width: 80vw;
   font-size: 1.25rem;
@@ -104,15 +135,21 @@ body {
 }
 
 .main__header {
+  color: var(--primary-color);
   font-size: 2rem;
   margin-bottom: 2rem;
   padding: 0 1rem;
 }
 
-.add-task__icon {
-  width: 25px;
-  height: 25px;
+.main__add-task {
+  color: var(--primary-color);
 }
+
+.add-task__icon {
+  width: 30px;
+  height: 30px;
+}
+
 
 .task {
   gap: 1rem;
@@ -136,19 +173,12 @@ body {
 
 .task__top {
   display: flex;
+  font-size: 1rem;
 }
 
 .task__bottom {
   display: flex;
   justify-content: space-between;
-}
-
-
-.task__data {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-  font-size: 1.25rem;
 }
 
 .task__date {
@@ -158,7 +188,7 @@ body {
 
 .task__description {
   display: block;
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: var(--font-color);
   opacity: 0.6;
   padding-right: 8ch;

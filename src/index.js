@@ -7,6 +7,7 @@ import { addTaskToList, removeTaskByID, getTaskById } from "./task/taskList.js";
 import createHeader from "./header.js"
 import createSidebar from "./sidebar.js";
 import createMain from "./main.js";
+import createFooter from "./footer.js";
 import createTaskForm from "./taskForm.js";
 import createProjectForm from "./projectForm.js";
 import createConfirmModal from "./confirmModal.js";
@@ -33,11 +34,12 @@ function initializeWebpage() {
     const header = createHeader();
     const sidebar = createSidebar(state.projects, onViewClick, onDeleteProject, onAddProject);
     const main = createMain(state.view, filterTasksByView(state.view, state.tasks), onMainClick);
+    const footer = createFooter();
 
 
     content.append(sidebar);
     content.append(main);
-    document.body.append(header, content);
+    document.body.append(header, content, footer);
 }
 
 function saveLocalStorage() {

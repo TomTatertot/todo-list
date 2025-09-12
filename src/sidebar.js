@@ -3,10 +3,9 @@ import inboxIcon from "./images/inbox.svg";
 import todayIcon from "./images/calendar-today.svg";
 import upcomingIcon from "./images/calendar-month.svg";
 import completedIcon from "./images/check-circle-outline.svg";
-import plusCircleIcon from "./images/plus-circle-outline.svg";
+import plusCircleIcon from "./images/plus-circle-outline.png";
 import folderIcon from "./images/folder-outline.svg";
 import closeIcon from "./images/close.svg";
-import createProjectForm from "./projectForm.js";
 
 
 const views = [
