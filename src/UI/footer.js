@@ -1,4 +1,4 @@
-import githubLogo from "./images/github-mark.png";
+import githubLogo from "../images/github-mark.png";
 
 function createFooter(){
     const footer = document.createElement("footer");

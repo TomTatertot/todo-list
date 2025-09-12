@@ -1,5 +1,5 @@
-import createTaskHTML from "../task/renderTask";
-import plusCircleIcon from "./images/plus-circle-outline.png";
+import createTaskHTML from "./renderTask";
+import plusCircleIcon from "../images/plus-circle-outline.png";
 
 function createMain(view, tasks, onClick) {
 

@@ -1,4 +1,4 @@
-import checkLogo from "./images/favicon.png";
+import checkLogo from "../images/favicon.png";
 
 function createHeader() {
     const header = document.createElement("header");
